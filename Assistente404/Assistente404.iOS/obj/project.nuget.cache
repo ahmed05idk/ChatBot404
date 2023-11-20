@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "9ZfS1pJYLjo8QGulBgc1G/PSEBkCuDIPeF6NCEba6Cz+bdiEPCV3o3HQLq7Lae13PE0wGpayxT0mrWlylBavEA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\eindemini\\OneDrive - edu.ti.ch\\Desktop\\Scuola\\Terzo anno\\Progetto\\Bot\\Assistente404\\Assistente404.iOS\\Assistente404.iOS.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\eindemini\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Users\\eindemini\\.nuget\\packages\\xamarin.essentials\\1.7.0\\xamarin.essentials.1.7.0.nupkg.sha512",
+    "C:\\Users\\eindemini\\.nuget\\packages\\xamarin.forms\\5.0.0.2196\\xamarin.forms.5.0.0.2196.nupkg.sha512"
+  ],
+  "logs": []
+}

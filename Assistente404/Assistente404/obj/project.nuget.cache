@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "o6sbrrV7yRWgBJhXSZi3BaNx2uxctSnVUugSgTT3aoNCkDDRSvQtsgE2C2pUBoe2pBWRXuz5zGM7HFyN2VIsMw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\eindemini\\OneDrive - edu.ti.ch\\Desktop\\Scuola\\Terzo anno\\Progetto\\Bot\\Assistente404\\Assistente404\\Assistente404.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\eindemini\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\eindemini\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
+    "C:\\Users\\eindemini\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Users\\eindemini\\.nuget\\packages\\xamarin.essentials\\1.7.0\\xamarin.essentials.1.7.0.nupkg.sha512",
+    "C:\\Users\\eindemini\\.nuget\\packages\\xamarin.forms\\5.0.0.2196\\xamarin.forms.5.0.0.2196.nupkg.sha512"
+  ],
+  "logs": []
+}
