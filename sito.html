@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Chat Migliorata</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        #contenitore-chat {
+            display: flex;
+            height: 100vh;
+        }
+
+        #barra-sinistra {
+            flex: 1;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        #barra-destra {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        #chat {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        #messaggio-input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        #invia-bottone {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="contenitore-chat">
+        <div id="barra-sinistra">
+            <h2>La Tua Chat</h2>
+            <div id="tua-chat"></div>
+            <button onclick="creaNuovaChat()">Nuova Chat</button>
+        </div>
+        <div id="barra-destra">
+            <h2>Chat</h2>
+            <div id="chat"></div>
+            <input type="text" id="messaggio-input" placeholder="Scrivi il tuo messaggio...">
+            <button id="invia-bottone" onclick="inviaMessaggio()">Invia</button>
+        </div>
+    </div>
+
+    <script>
+        var chatCorrente = null;
+
+        function creaNuovaChat() {
+            var barraSinistra = document.getElementById('barra-sinistra');
+            var nuovaChatDiv = document.createElement('div');
+            nuovaChatDiv.textContent = 'Nuova Chat';
+            nuovaChatDiv.onclick = function () {
+                cambiaChat(this);
+            };
+            // Aggiungi la nuova chat alla barra sinistra
+            barraSinistra.appendChild(nuovaChatDiv);
+            // Se c'era già una chat corrente, rimuovila
+            if (chatCorrente) {
+                barraSinistra.removeChild(chatCorrente);
+            }
+            chatCorrente = nuovaChatDiv;
+            cambiaChat(nuovaChatDiv);
+        }
+
+        function cambiaChat(chatDiv) {
+            var contenitoreChat = document.getElementById('chat');
+            contenitoreChat.innerHTML = '';
+            chatCorrente = chatDiv;
+            document.getElementById('tua-chat').textContent = chatDiv.textContent;
+        }
+
+        function inviaMessaggio() {
+            var inputMessaggio = document.getElementById('messaggio-input');
+            var messaggio = inputMessaggio.value;
+
+            if (messaggio.trim() !== '') {
+                var contenitoreChat = document.getElementById('chat');
+                contenitoreChat.innerHTML += '<p>Tu: ' + messaggio + '</p>';
+                inputMessaggio.value = '';
+            }
+        }
+    </script>
+</body>
+</html>
