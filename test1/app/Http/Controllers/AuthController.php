@@ -31,7 +31,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         // Reindirizzamento dopo la registrazione
-        return redirect('/dashboard'); // Puoi personalizzare il percorso a tuo piacimento
+        return redirect('/'); // Puoi personalizzare il percorso a tuo piacimento
     }
 
     public function showRegistrationForm()
@@ -41,7 +41,7 @@ class AuthController extends Controller
 
     use AuthenticatesUsers;
 
-    protected $redirectTo = '/dashboard';
+    protected $redirectTo = '/';
 
     public function __construct()
     {

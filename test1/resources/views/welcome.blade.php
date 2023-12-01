@@ -33,13 +33,14 @@
         }
 
         #barra-destra {
-            flex: 3;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            overflow-y: auto;
-            height: 100vh;
-        }
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px 0px 20px;
+    overflow-y: auto;
+    height: 100vh;
+    position: relative; /* Cambia a position: relative; */
+}
 
         #elenco-chat {
             margin-bottom: 20px;
@@ -67,24 +68,34 @@
         }
 
         #barra-invio {
-            display: flex;
-            margin-top: auto;
+        display: flex;
+        position: sticky; 
+        bottom: 0;
+        width: 100%;
+        background-color: #fff;
+        padding: 20px;
+        box-sizing: border-box;
+        z-index: 1000;
         }
 
+
         #messaggio-input {
-            flex: 1;
+            width: 100%;
             padding: 10px;
             box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
         #invia-bottone {
-            padding: 10px;
             background-color: #4CAF50;
             color: white;
             border: none;
             cursor: pointer;
             margin-left: 10px;
+            border-radius: 5px;
         }
+
     </style>
 </head>
 <body>
@@ -103,7 +114,7 @@
             <h2 id="tua-chat-header">Chat</h2>
             <div id="chat-container"></div>
 
-            <div id="barra-invio">
+            <div id="barra-invio" >
                 <input type="text" id="messaggio-input" placeholder="Scrivi il tuo messaggio...">
                 <button id="invia-bottone" onclick="inviaMessaggio()" style="padding: 1rem;">
                     &#9650;
@@ -118,41 +129,45 @@
         var chatCounter = 0;
 
         function creaNuovaChat() {
-            var barraSinistra = document.getElementById('barra-sinistra');
-            var nuovaChatDiv = document.createElement('div');
-            var chatID = 'chat_' + chatCounter++;
-            nuovaChatDiv.id = chatID;
-            nuovaChatDiv.classList.add('chat-item');
-            nuovaChatDiv.textContent = 'Nuova Chat ' + chatCounter;
-            nuovaChatDiv.onclick = function () {
-                cambiaChat(chatID);
-            };
-            barraSinistra.appendChild(nuovaChatDiv);
-            document.getElementById('elenco-chat').appendChild(nuovaChatDiv);
-
-            // Creazione del contenitore dei messaggi per questa chat
-            var chatContainer = document.getElementById('chat-container');
-            var nuovaChatContainer = document.createElement('div');
-            nuovaChatContainer.id = chatID + '-container';
-            nuovaChatContainer.classList.add('chat');
-            chatContainer.appendChild(nuovaChatContainer);
-
+        var barraSinistra = document.getElementById('barra-sinistra');
+        var nuovaChatDiv = document.createElement('div');
+        var chatID = 'chat_' + chatCounter++;
+        nuovaChatDiv.id = chatID;
+        nuovaChatDiv.classList.add('chat-item');
+        nuovaChatDiv.textContent = 'Nuova Chat ' + chatCounter;
+        nuovaChatDiv.onclick = function () {
             cambiaChat(chatID);
-        }
+        };
+        barraSinistra.appendChild(nuovaChatDiv);
+        document.getElementById('elenco-chat').appendChild(nuovaChatDiv);
 
-        function cambiaChat(chatID) {
-            // Nascondi tutti i contenitori delle chat
-            var chatContainers = document.querySelectorAll('.chat');
-            chatContainers.forEach(function (container) {
-                container.classList.remove('active-chat');
-            });
+        // Creazione del contenitore dei messaggi per questa chat
+        var chatContainer = document.getElementById('chat-container');
+        var nuovaChatContainer = document.createElement('div');
+        nuovaChatContainer.id = chatID + '-container';
+        nuovaChatContainer.classList.add('chat');
+        chatContainer.appendChild(nuovaChatContainer);
 
-            // Mostra solo il contenitore della chat selezionata
-            var chatContainer = document.getElementById(chatID + '-container');
-            chatContainer.classList.add('active-chat');
+        cambiaChat(chatID);
+    }
 
-            document.getElementById('tua-chat-header').textContent = document.getElementById(chatID).textContent;
-        }
+    // Funzione per cambiare la chat attiva
+    function cambiaChat(chatID) {
+        // Nascondi tutti i contenitori delle chat
+        var chatContainers = document.querySelectorAll('.chat');
+        chatContainers.forEach(function (container) {
+            container.classList.remove('active-chat');
+        });
+
+        // Mostra solo il contenitore della chat selezionata
+        var chatContainer = document.getElementById(chatID + '-container');
+        chatContainer.classList.add('active-chat');
+
+        document.getElementById('tua-chat-header').textContent = document.getElementById(chatID).textContent;
+    }
+
+    // Chiamare la funzione creaNuovaChat() per creare la chat iniziale
+    creaNuovaChat();
 
         function inviaMessaggio() {
             var inputMessaggio = document.getElementById('messaggio-input');
