@@ -1,4 +1,4 @@
-# ChatBot404
+# Non modificate roba pls che se no è un casino
 
 aggiungere cartella php alle variabili di sistema
 
