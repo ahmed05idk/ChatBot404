@@ -53,5 +53,21 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    public function logout(Request $request)
+    {
+        // Effettua il logout dell'utente autenticato
+        Auth::logout();
+
+        // Cancella la sessione utente
+        $request->session()->invalidate();
+
+        // Cancella il cookie di autenticazione
+        $request->session()->regenerateToken();
+
+        // Reindirizza l'utente alla pagina di login con un messaggio di successo
+        return redirect('/')->with('success', 'Logout effettuato con successo.');
+    }
+
+
 }
 ?>
