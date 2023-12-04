@@ -11,7 +11,7 @@ schiacciare su admin di mysqul alla porta 3306
 
 creare database chatBotData
 
-
+// forse fixato e non serve
 andare nella cartella test1 creare una copia di .env.example e rinominarlo in.env all interno cambiare DB_DATABASE=chatBotData
 
 
