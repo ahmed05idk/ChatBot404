@@ -33,14 +33,14 @@
         }
 
         #barra-destra {
-    flex: 3;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 20px 0px 20px;
-    overflow-y: auto;
-    height: 100vh;
-    position: relative; /* Cambia a position: relative; */
-}
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 20px 0px 20px;
+            overflow-y: auto;
+            height: 100vh;
+            position: relative; /* Cambia a position: relative; */
+        }
 
         #elenco-chat {
             margin-bottom: 20px;

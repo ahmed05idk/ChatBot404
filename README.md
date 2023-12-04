@@ -12,6 +12,9 @@ schiacciare su admin di mysqul alla porta 3306
 creare database chatBotData
 
 
+andare nella cartella test1 creare una copia di .env.example e rinominarlo in.env all interno cambiare DB_DATABASE=chatBotData
+
+
 andare nella cartella da cmd
 cd "C:\Users\eindemini\OneDrive - edu.ti.ch\Desktop\Scuola\Terzo anno\Progetto\ChatBot404\test1"
 
@@ -19,12 +22,18 @@ nel cmd fare
 php artisan serve
 
 
+una volta avviato andate alla pagina http://127.0.0.1:8000/
+
+schiacciare su generate app key nel riquadro a destra e ricaricare 
+
 
 
 
 
 crea file login nella cartella auth
 php artisan make:view auth.login
+
+
 
 
 
