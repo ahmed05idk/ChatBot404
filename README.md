@@ -54,3 +54,7 @@ warning: in the working copy of 'php-8.3.0/snapshot.txt', LF will be replaced by
 todo
 
 deve salvare la chat nel db così che se sei loggato e ricarichi la pagina ti ri mette le tue chat
+eliminare le chat
+pass o email errati nel login se sbagliati
+password dimenticata
+verifica dell email

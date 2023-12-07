@@ -21,6 +21,7 @@ Route::get('/', function () {
 
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatController;
 
 // Pagina di Login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -32,5 +33,7 @@ Route::post('/register', [AuthController::class, 'register']);
 
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::post('/logout', [AuthController::class, 'logout']);
+
+Route::post('/messages', [ChatController::class, 'store']);
 
 

@@ -6,25 +6,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Aggiungi qui i tuoi stili CSS, script JS, ecc. -->
+    <style>
+        form {
+            text-align: center;
+        }
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 97vh;
+        }
+
+        .card {
+            width: 400px;
+            padding: 20px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            width: 100%;
+            height: 40px;
+            color: white;
+            font-size:20px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .btn-link {
+            color: #007bff;
+        }
+
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+        .form-control{
+            width: 70%;
+            height: 40px;
+        }
+        .form-control::placeholder{
+            font-size: 20px;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Aggiungi qui il tuo menu di navigazione -->
-                </div>
-            </div>
-        </nav>
-
         <main class="py-4">
             @yield('content')
         </main>

@@ -3,7 +3,7 @@
 
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
@@ -42,12 +42,19 @@
         height: 100vh;
         position: relative;
     }
+
     #barra-sopra {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
+        /* Cambiato da space-between a flex-end */
         align-items: center;
         margin-bottom: 20px;
         height: 30px;
+        gap: 10px;
+    }
+
+    .login-register {
+        display: flex;
         gap: 10px;
     }
 
@@ -112,6 +119,10 @@
         border-radius: 5px;
         height: 60px;
     }
+
+    .nav-link {
+        display: flex;
+    }
     </style>
 </head>
 
@@ -123,21 +134,24 @@
             <div id="elenco-chat"></div>
         </div>
         <div id="barra-destra">
-            <div id="barra-sopra">
-                @if (Auth::check())
-                <span class="nav-link" style="padding: 0.5rem;">Benvenuto: {{ Auth::user()->name }}</span>
-                <div>
-                    <a class="nav-link" href="{{ route('logout') }}" style="padding: 0.5rem;"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                </div>
-                @else
-                <a class="nav-link" href="{{ route('login') }}" style="padding: 0.5rem;">Login</a>
-                <a class="nav-link" href="{{ route('register') }}" style="padding: 0.5rem;">Register</a>
-                @endif
-            </div>
+        <div id="barra-sopra" style="display: flex; justify-content: space-between;">
+    <div class="nav-link" style="padding: 0.5rem;">
+        @if (Auth::check())
+        <span>Benvenuto: {{ Auth::user()->name }}</span>
+        @endif
+    </div>
+    <div class="login-register">
+        @if (Auth::check())
+        <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+        @else
+        <a href="{{ route('login') }}" class="nav-link" style="padding: 0.5rem;">Login</a>
+        <a href="{{ route('register') }}" class="nav-link" style="padding: 0.5rem;">Register</a>
+        @endif
+    </div>
+</div>
 
             <h2 id="tua-chat-header">Chat</h2>
             <div id="chat-container"></div>
@@ -244,15 +258,22 @@
 
         if (messaggio.trim() !== '') {
             var chatContainer = document.querySelector('.active-chat');
-            chatContainer.innerHTML += '<p>Tu: ' + messaggio + '</p>';
 
-            // Salva il messaggio per la chat corrente
-            var chatID = chatContainer.id.replace('-container', '');
-            messaggiPerChat[chatID] = messaggio;
+            // Effettua una richiesta AJAX per salvare il messaggio nel database
+            axios.post('/messages', {
+                    message: messaggio
+                })
+                .then(function(response) {
+                    // Aggiungi il messaggio alla chat solo se il salvataggio nel database è riuscito
+                    chatContainer.innerHTML += '<p>Tu: ' + messaggio + '</p>';
 
-            // Pulisci il contenuto del textarea e reimposta la sua altezza
-            inputMessaggio.value = '';
-            inputMessaggio.style.height = 'auto';
+                    // Pulisci il contenuto del textarea e reimposta la sua altezza
+                    inputMessaggio.value = '';
+                    inputMessaggio.style.height = 'auto';
+                })
+                .catch(function(error) {
+                    console.error('Errore nel salvataggio del messaggio:', error);
+                });
         }
     }
     </script>
