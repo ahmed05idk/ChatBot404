@@ -2,68 +2,81 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
-        form {
-            text-align: center;
-        }
-        body {
-            background-color: #f8f9fa;
-        }
+    form {
+        text-align: center;
+    }
 
-        .container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 97vh;
-        }
+    body {
+        background-color: #f8f9fa;
+    }
 
-        .card {
-            width: 400px;
-            padding: 20px;
-            border: 1px solid #ced4da;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+    .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 97vh;
+    }
+
+    .card {
+        width: 400px;
+        padding: 20px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .form-group {
+        margin-bottom: 20px;
+    }
 
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-            width: 100%;
-            height: 40px;
-            color: white;
-            font-size:20px;
-        }
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        width: 100%;
+        height: 40px;
+        color: white;
+        font-size: 20px;
+    }
 
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
 
-        .btn-link {
-            color: #007bff;
-        }
+    .btn-link {
+        color: #007bff;
+    }
 
-        .btn-link:hover {
-            text-decoration: underline;
-        }
-        .form-control{
-            width: 70%;
-            height: 40px;
-        }
-        .form-control::placeholder{
-            font-size: 20px;
-        }
+    .btn-link:hover {
+        text-decoration: underline;
+    }
+
+    .form-control {
+        width: 70%;
+        height: 40px;
+    }
+
+    .form-control::placeholder {
+        font-size: 20px;
+    }
+
+    .back-button {
+        display: inline-block;
+        margin-bottom: 20px;
+        text-decoration: none;
+        color: #000;
+        font-size: 30px;
+    }
     </style>
 </head>
+
 <body>
     <div id="app">
         <main class="py-4">
@@ -73,4 +86,5 @@
 
     <!-- Aggiungi qui i tuoi script JS, librerie, ecc. -->
 </body>
+
 </html>

@@ -134,24 +134,25 @@
             <div id="elenco-chat"></div>
         </div>
         <div id="barra-destra">
-        <div id="barra-sopra" style="display: flex; justify-content: space-between;">
-    <div class="nav-link" style="padding: 0.5rem;">
-        @if (Auth::check())
-        <span>Benvenuto: {{ Auth::user()->name }}</span>
-        @endif
-    </div>
-    <div class="login-register">
-        @if (Auth::check())
-        <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
-        @else
-        <a href="{{ route('login') }}" class="nav-link" style="padding: 0.5rem;">Login</a>
-        <a href="{{ route('register') }}" class="nav-link" style="padding: 0.5rem;">Register</a>
-        @endif
-    </div>
-</div>
+            <div id="barra-sopra" style="display: flex; justify-content: space-between;">
+                <div class="nav-link" style="padding: 0.5rem;">
+                    @if (Auth::check())
+                    <span>Benvenuto: {{ Auth::user()->name }}</span>
+                    @endif
+                </div>
+                <div class="login-register">
+                    @if (Auth::check())
+                    <a class="nav-link" href="{{ route('logout') }}"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                    @else
+                    <a href="{{ route('login') }}" class="nav-link" style="padding: 0.5rem;">Login</a>
+                    <a href="{{ route('register') }}" class="nav-link" style="padding: 0.5rem;">Register</a>
+                    @endif
+                </div>
+            </div>
 
             <h2 id="tua-chat-header">Chat</h2>
             <div id="chat-container"></div>
