@@ -19,13 +19,18 @@ class ChatController extends Controller
     {
         $validatedData = $request->validate([
             'message' => 'required|max:255',
+            'chatID' => 'required|max:255',
         ]);
     
         // Cambia 'Chat' con il tuo modello dei messaggi (presumibilmente 'Message')
-        $message = Message::create($validatedData);
+        $message = Message::create([
+            'message' => $validatedData['message'],
+            'chatID' => $validatedData['chatID'], 
+        ]);
     
         return redirect('/')->with('success', 'Message is successfully saved');
     }
+    
     
     public function create()
     {

@@ -35,21 +35,32 @@ php artisan make:view auth.login
 
 
 
+creare tabella per nuovo database senza ancora inserirla nel db
+php artisan make:migration messages
 
 
-
-warning: in the working copy of 'php-8.3.0/snapshot.txt', LF will be replaced by CRLF the next time Git touches it
-
-
+crea la tabella della migration nel db
+php artisan migrate
 
 
+Per agginta campi a tabella:
 
+crei migrazione
+php artisan make:migration add_nomeCampo_to_nomeTabella_table
 
+andare nel file appena creato database\migration\nomefile
 
+sostituire la funzione up con
 
-
-
-
+    public function up()
+    {
+        Schema::table('messages', function (Blueprint $table) { // al posto di message mettere nome tabella
+            $table->text('ChatID'); // Cambia il tipo di dato in base alle tue esigenze o il nome campo
+        });
+    }
+    
+e poi fare 
+php artisan migrate
 
 todo
 
