@@ -18,23 +18,27 @@ class ChatController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'message' => 'required|max:255',
-            'chatID' => 'required|max:255',
+            'message' => 'required',
+            'chatID' => 'required',
+            'userCreationId' => 'required',
         ]);
     
         // Cambia 'Chat' con il tuo modello dei messaggi (presumibilmente 'Message')
         $message = Message::create([
             'message' => $validatedData['message'],
             'chatID' => $validatedData['chatID'], 
+            'userCreationId' => $validatedData['userCreationId'], 
         ]);
     
         return redirect('/')->with('success', 'Message is successfully saved');
     }
     
     
-    public function create()
+    public function get()
     {
-        return view('chats.create');
+        $mess = DB::table('messages')->select('message')->get();
+
+        return view('some-view')->with('messages', $mess);
     }
 
     public function show($id)

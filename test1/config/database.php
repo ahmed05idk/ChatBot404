@@ -42,10 +42,21 @@ return [
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
+		
+		
 
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
+			
+			'read' => [
+        'host' => '127.0.0.1',
+    ],
+    'write' => [
+        'host' => '127.0.0.1'
+    ],
+			
+			
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'forge'),

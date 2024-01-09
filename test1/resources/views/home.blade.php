@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    
+
     @extends('homeStyle')
     @extends('homeJs')
 </head>
@@ -26,6 +26,9 @@
                     <span>Benvenuto: {{ Auth::user()->name }}</span>
                     @endif
                 </div>
+
+                
+
                 <div class="login-register">
                     @if (Auth::check())
                     <a class="nav-link" href="{{ route('logout') }}"

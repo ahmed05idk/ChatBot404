@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <!--    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
 
 </head>
 
@@ -16,7 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
-    var chatCounter = 0;
+    var chatCounter = 1;
 
     window.addEventListener('DOMContentLoaded', (event) => {
         const textarea = document.getElementById('messaggio-input');
@@ -48,28 +48,73 @@
     });
 
 
-    function creaNuovaChat() {
-        var barraSinistra = document.getElementById('barra-sinistra');
-        var nuovaChatDiv = document.createElement('div');
-        var chatID = 'chat_' + chatCounter++;
-        nuovaChatDiv.id = chatID;
-        nuovaChatDiv.classList.add('chat-item');
-        nuovaChatDiv.textContent = 'Nuova Chat ' + chatCounter;
-        nuovaChatDiv.onclick = function() {
-            cambiaChat(chatID);
-        };
-        barraSinistra.appendChild(nuovaChatDiv);
-        document.getElementById('elenco-chat').appendChild(nuovaChatDiv);
 
-        // Creazione del contenitore dei messaggi per questa chat
-        var chatContainer = document.getElementById('chat-container');
-        var nuovaChatContainer = document.createElement('div');
-        nuovaChatContainer.id = chatID + '-container';
-        nuovaChatContainer.classList.add('chat');
-        chatContainer.appendChild(nuovaChatContainer);
 
-        cambiaChat(chatID);
+
+    window.onload = function() {
+    var initialChatID = 'chat_1'; // replace this with the ID of the chat you want to select
+    cambiaChat(initialChatID);
+    
+};
+console.log("a");
+creaChatDaDB();
+
+function creaChatDaDB() {
+    var messaggi = <?php echo json_encode($messaggi); ?>;
+    if (messaggi.length === 0) {
+        creaNuovaChat();
+        return;
     }
+
+    // Crea un array di ID di chat unici
+    var chatIDs = [];
+    messaggi.forEach(function(messaggio) {
+        if (!chatIDs.includes(messaggio.ChatID)) {
+            chatIDs.push(messaggio.ChatID);
+        }
+    });
+
+    // Crea una nuova chat per ogni ID di chat unico
+    chatIDs.forEach(function(chatID) {
+        creaNuovaChat(chatID);
+    });
+
+    // Assegna i messaggi alle chat corrispondenti
+    messaggi.forEach(function(messaggio) {
+        document.getElementById(messaggio.ChatID+'-container').innerHTML = messaggio.message;
+    });
+}
+
+
+
+ 
+
+function creaNuovaChat() {
+    var barraSinistra = document.getElementById('barra-sinistra');
+    var nuovaChatDiv = document.createElement('div');
+    var chatID = 'chat_' + chatCounter; // removed the increment here
+    nuovaChatDiv.id = chatID;
+    nuovaChatDiv.classList.add('chat-item');
+    nuovaChatDiv.textContent = 'Nuova Chat ' + chatCounter;
+    nuovaChatDiv.onclick = function() {
+        cambiaChat(chatID);
+    };
+    barraSinistra.appendChild(nuovaChatDiv);
+    document.getElementById('elenco-chat').appendChild(nuovaChatDiv);
+
+    // Creazione del contenitore dei messaggi per questa chat
+    var chatContainer = document.getElementById('chat-container');
+    var nuovaChatContainer = document.createElement('div');
+    nuovaChatContainer.id = chatID + '-container';
+    nuovaChatContainer.classList.add('chat');
+    chatContainer.appendChild(nuovaChatContainer);
+
+    chatCounter++; // keep the increment here
+    
+}
+   // Chiamare la funzione creaNuovaChat() per creare la chat iniziale
+   
+
 
 
     // Funzione per cambiare la chat attiva
@@ -95,9 +140,6 @@
     }
 
 
-    // Chiamare la funzione creaNuovaChat() per creare la chat iniziale
-    creaNuovaChat();
-
     function inviaMessaggio() {
         var inputMessaggio = document.getElementById('messaggio-input');
         var messaggio = inputMessaggio.value;
@@ -115,16 +157,24 @@
             inputMessaggio.value = '';
             inputMessaggio.style.height = 'auto';
 
-
         }
     }
 
 
     window.onbeforeunload = function() {
-        salvaDatiSincronamente();
-        return null;
-        
+
+        var isUserRegistered = checkUserRegistration();
+
+        if (isUserRegistered) {
+
+            salvaDatiSincronamente();
+        }
+
+
+        return null
+
     };
+
     function salvaDatiSincronamente() {
         var chatContainers = document.querySelectorAll('[id^="chat_"][id$="-container"]');
 
@@ -133,9 +183,11 @@
             var chatID = container.id.replace('-container', ''); // Ottieni l'ID della chat
             var messages = container.innerHTML; // Ottieni il contenuto del container
 
+            // Ottieni l'ID dell'utente lato server usando PHP
+            var idUtente = <?php if(Auth::check()) { echo Auth::user()->id; } else { echo 'null'; } ?>;
 
             // Invia una richiesta AJAX per salvare il contenuto nel database
-             salvaChatNelDatabase(chatID, messages)
+            salvaChatNelDatabase(chatID, messages, idUtente)
                 .then(function() {
                     console.log('Chat salvata con successo nel database.');
                 })
@@ -145,18 +197,28 @@
                         console.error('Dettagli dell\'errore:', error.response.data);
                     }
                 });
-
         });
     }
 
-    function salvaChatNelDatabase(chatID, messages) {
-        
+
+    function salvaChatNelDatabase(chatID, messages, idUtente) {
         return axios.post('/messages', {
             chatID: chatID,
-            message: messages
+            message: messages,
+            userCreationId: idUtente
         });
     }
-    
+
+    function checkUserRegistration() {
+        @if(Auth::check())
+        return true
+        @else
+        return false
+        @endif
+    }
+
+
+
     </script>
 </body>
 
