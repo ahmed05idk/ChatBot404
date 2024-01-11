@@ -24,8 +24,7 @@
     }
 
     #barra-sinistra {
-        min-width: 180px;
-        width: 15%;
+        width: 15rem;
         background-color: #333;
         color: #fff;
         padding: 20px;
@@ -122,6 +121,12 @@
 
     .nav-link {
         display: flex;
+    }
+    .chatButton {
+        background-color: #2e8500;
+        color: #e60000;
+        margin-left: 24%;
+        border: 10px;
     }
     </style>
 </head>

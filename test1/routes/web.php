@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,6 +36,8 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::post('/logout', [AuthController::class, 'logout']);
 
+Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+
 Route::post('/messages', [ChatController::class, 'store']);
 
 /*
@@ -55,5 +59,46 @@ Route::get('/', function () {
 });
 
 
+Route::post('/updateMessages', function (Request $request) {
+    // Supponendo che tu stia passando i dati necessari nella richiesta
+    $userId = Auth::id();
+    $newMessage = $request->input('newMessage');
+    $chatId = $request->input('chatId');
+
+    // Aggiorna il messaggio nella tabella "messages"
+    DB::table('messages')
+        ->where('userCreationId', $userId)
+        ->where('ChatID', $chatId)
+        ->update(['message' => $newMessage]);
+
+    return true;
+});
 
 
+Route::post('/deleteChat', function (Request $request) {
+    // Supponendo che tu stia passando i dati necessari nella richiesta
+    $userId = Auth::id();
+    $chatId = $request->input('chatId');
+
+    // Verifica se l'utente corrente è coinvolto nella chat
+    $isUserInChat = DB::table('messages')
+        ->where('userCreationId', $userId)
+        ->where('ChatID', $chatId)
+        ->exists();
+
+    // Se l'utente è coinvolto, elimina la chat
+    if ($isUserInChat) {
+        DB::table('messages')
+            ->where('userCreationId', $userId)
+            ->where('ChatID', $chatId)
+            ->delete();
+
+        // Puoi anche eliminare la chat dalla tabella delle chat, ad esempio:
+        // DB::table('chats')->where('id', $chatId)->delete();
+
+        return true;
+    }
+
+    // Se l'utente non è coinvolto nella chat, restituisci false o un messaggio di errore
+    return false;
+});

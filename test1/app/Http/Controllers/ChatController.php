@@ -33,37 +33,14 @@ class ChatController extends Controller
         return redirect('/')->with('success', 'Message is successfully saved');
     }
     
-    
+    /*
     public function get()
     {
         $mess = DB::table('messages')->select('message')->get();
 
         return view('some-view')->with('messages', $mess);
     }
-
-    public function show($id)
-    {
-        $chat = Chat::findOrFail($id);
-
-        return view('chats.show', compact('chat'));
-    }
-
-    public function edit($id)
-    {
-        $chat = Chat::findOrFail($id);
-
-        return view('chats.edit', compact('chat'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $validatedData = $request->validate([
-            'message' => 'required|max:255',
-        ]);
-        Chat::whereId($id)->update($validatedData);
-
-        return redirect('/')->with('success', 'Chat is successfully updated');
-    }
+*/
 
     public function destroy($id)
     {

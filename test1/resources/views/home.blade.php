@@ -16,7 +16,7 @@
     <div id="contenitore-chat">
         <div id="barra-sinistra">
             <h2>Le Tue Chat</h2>
-            <button onclick="creaNuovaChat()" style="margin: 0.5rem;">Nuova Chat</button>
+            <button onclick="creaNuovaChat(false); cambiaChatAllaCreazione();" style="margin: 0.5rem;">Nuova Chat</button>
             <div id="elenco-chat"></div>
         </div>
         <div id="barra-destra">
@@ -26,9 +26,7 @@
                     <span>Benvenuto: {{ Auth::user()->name }}</span>
                     @endif
                 </div>
-
                 
-
                 <div class="login-register">
                     @if (Auth::check())
                     <a class="nav-link" href="{{ route('logout') }}"

@@ -74,6 +74,9 @@
         color: #000;
         font-size: 30px;
     }
+    #wrongPassMail{
+        color: red;
+    }
     </style>
 </head>
 

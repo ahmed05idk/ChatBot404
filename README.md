@@ -62,10 +62,20 @@ sostituire la funzione up con
 e poi fare 
 php artisan migrate
 
+
+
+_token: '{{ csrf_token() }}' // Aggiungi questa linea per includere il token CSRF da errore se non lo metti in una chiamata Ajax
+
+
 todo
 
-deve salvare la chat nel db così che se sei loggato e ricarichi la pagina ti ri mette le tue chat
-eliminare le chat
-pass o email errati nel login se sbagliati
+
 password dimenticata
 verifica dell email
+cambiare stile barretta scorrimento
+testo che apppare quando sctivi
+pulsante per chiudere barra chat e se è più ristretto di un tot di px si chiude in automatico
+tasto elimina tutte le chat
+se sei  in una chat nuova non puoi crearne un altra senza aver scritto
+code injection
+fare in modo che non si possa eliminare la chat se c'e nè solo una

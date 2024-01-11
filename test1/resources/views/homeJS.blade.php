@@ -14,9 +14,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+
 
     <script>
     var chatCounter = 1;
+    var chatModificate = [];
+
+    
 
     window.addEventListener('DOMContentLoaded', (event) => {
         const textarea = document.getElementById('messaggio-input');
@@ -51,70 +59,110 @@
 
 
 
-    window.onload = function() {
-    var initialChatID = 'chat_1'; // replace this with the ID of the chat you want to select
-    cambiaChat(initialChatID);
-    
-};
-console.log("a");
-creaChatDaDB();
 
-function creaChatDaDB() {
-    var messaggi = <?php echo json_encode($messaggi); ?>;
-    if (messaggi.length === 0) {
-        creaNuovaChat();
-        return;
+    function selectFirstChat() {
+        
+        var messaggi = <?php echo json_encode($messaggi); ?>;
+        var initialChatID = messaggi[0].ChatID;
+        
+        cambiaChat(initialChatID);
+    };
+ 
+    creaChatDaDB();
+
+    function creaChatDaDB() {
+        var messaggi = <?php echo json_encode($messaggi); ?>;
+        if (messaggi.length === 0) {
+            creaNuovaChat();
+            return;
+        }
+
+        // Crea un array di ID di chat unici
+        var chatIDs = [];
+        messaggi.forEach(function(messaggio) {
+            if (!chatIDs.includes(messaggio.ChatID)) {
+                chatIDs.push(messaggio.ChatID);
+            }
+        });
+
+        // Crea una nuova chat per ogni ID di chat unico
+        chatIDs.forEach(function(chatID) {
+            creaNuovaChat(chatID);
+        });
+
+        // Assegna i messaggi alle chat corrispondenti
+        messaggi.forEach(function(messaggio) {
+            document.getElementById(messaggio.ChatID + '-container').innerHTML = messaggio.message;
+        });
+        
     }
 
-    // Crea un array di ID di chat unici
-    var chatIDs = [];
-    messaggi.forEach(function(messaggio) {
-        if (!chatIDs.includes(messaggio.ChatID)) {
-            chatIDs.push(messaggio.ChatID);
+
+    function creaNuovaChat(chatIDPassato) {
+        var barraSinistra = document.getElementById('barra-sinistra');
+        var nuovaChatDiv = document.createElement('div');
+        if (chatIDPassato) {
+            var chatID = chatIDPassato;
+        } else {
+            var chatID = 'chat_' + chatCounter;
+        }
+        nuovaChatDiv.id = chatID;
+        nuovaChatDiv.classList.add('chat-item');
+        nuovaChatDiv.innerHTML = 'Nuova Chat ' + chatCounter +
+            '<button class="chatButton" onclick="eliminaChat(event, \'' + chatID +
+            '\')"><i class="fas fa-trash-alt"></i></button>';
+
+        nuovaChatDiv.onclick = function() {
+            cambiaChat(chatID);
+        };
+        barraSinistra.appendChild(nuovaChatDiv);
+        document.getElementById('elenco-chat').appendChild(nuovaChatDiv);
+
+        // Creazione del contenitore dei messaggi per questa chat
+        var chatContainer = document.getElementById('chat-container');
+        var nuovaChatContainer = document.createElement('div');
+        nuovaChatContainer.id = chatID + '-container';
+        nuovaChatContainer.classList.add('chat');
+        chatContainer.appendChild(nuovaChatContainer);
+
+        chatCounter++;
+    }
+
+
+    function cambiaChatAllaCreazione() {
+        var chatID = 'chat_' + (chatCounter - 1);
+        cambiaChat(chatID);
+    }
+
+    function eliminaChat(event, chatID) {
+    // Impedisci la propagazione dell'evento al pulsante principale
+    event.stopPropagation();
+
+    $.ajax({
+        type: 'POST',
+        url: '/deleteChat',
+        data: {
+            chatId: chatID,
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(data) {
+            // Rimuovi la chat dallo schermo
+            var chatDiv = document.getElementById(chatID);
+            if (chatDiv) {
+                chatDiv.remove();
+            }
+
+            // Rimuovi anche il contenitore dei messaggi della chat
+            var chatContainer = document.getElementById(chatID + '-container');
+            if (chatContainer) {
+                chatContainer.remove();
+            }
+        },
+        error: function(error) {
+            console.error('Errore durante l\'aggiornamento del messaggio');
         }
     });
-
-    // Crea una nuova chat per ogni ID di chat unico
-    chatIDs.forEach(function(chatID) {
-        creaNuovaChat(chatID);
-    });
-
-    // Assegna i messaggi alle chat corrispondenti
-    messaggi.forEach(function(messaggio) {
-        document.getElementById(messaggio.ChatID+'-container').innerHTML = messaggio.message;
-    });
 }
-
-
-
- 
-
-function creaNuovaChat() {
-    var barraSinistra = document.getElementById('barra-sinistra');
-    var nuovaChatDiv = document.createElement('div');
-    var chatID = 'chat_' + chatCounter; // removed the increment here
-    nuovaChatDiv.id = chatID;
-    nuovaChatDiv.classList.add('chat-item');
-    nuovaChatDiv.textContent = 'Nuova Chat ' + chatCounter;
-    nuovaChatDiv.onclick = function() {
-        cambiaChat(chatID);
-    };
-    barraSinistra.appendChild(nuovaChatDiv);
-    document.getElementById('elenco-chat').appendChild(nuovaChatDiv);
-
-    // Creazione del contenitore dei messaggi per questa chat
-    var chatContainer = document.getElementById('chat-container');
-    var nuovaChatContainer = document.createElement('div');
-    nuovaChatContainer.id = chatID + '-container';
-    nuovaChatContainer.classList.add('chat');
-    chatContainer.appendChild(nuovaChatContainer);
-
-    chatCounter++; // keep the increment here
-    
-}
-   // Chiamare la funzione creaNuovaChat() per creare la chat iniziale
-   
-
 
 
     // Funzione per cambiare la chat attiva
@@ -158,6 +206,10 @@ function creaNuovaChat() {
             inputMessaggio.style.height = 'auto';
 
         }
+        // Salva chat modificata per update
+        if (!chatModificate.includes(chatContainer.id)) {
+            chatModificate.push(chatContainer.id)
+        }
     }
 
 
@@ -168,6 +220,8 @@ function creaNuovaChat() {
         if (isUserRegistered) {
 
             salvaDatiSincronamente();
+
+            updateChat();
         }
 
 
@@ -182,15 +236,34 @@ function creaNuovaChat() {
         chatContainers.forEach(function(container) {
             var chatID = container.id.replace('-container', ''); // Ottieni l'ID della chat
             var messages = container.innerHTML; // Ottieni il contenuto del container
+            var idExist = false;
+
+            // controllo per evitare dupicati di chat nel db
+            var messaggi = <?php echo json_encode($messaggi); ?>;
+            var chatIDs = [];
+            messaggi.forEach(function(messaggio) {
+                if (!chatIDs.includes(messaggio.ChatID)) {
+                    chatIDs.push(messaggio.ChatID);
+                }
+            });
+            chatIDs.forEach(function(chatIDdb) {
+                if (chatIDdb == chatID) {
+                    idExist = true
+                }
+
+            });
+
+            if (idExist) {
+                return;
+            }
+
 
             // Ottieni l'ID dell'utente lato server usando PHP
             var idUtente = <?php if(Auth::check()) { echo Auth::user()->id; } else { echo 'null'; } ?>;
 
             // Invia una richiesta AJAX per salvare il contenuto nel database
             salvaChatNelDatabase(chatID, messages, idUtente)
-                .then(function() {
-                    console.log('Chat salvata con successo nel database.');
-                })
+                .then(function() {})
                 .catch(function(error) {
                     console.error('Errore nel salvataggio della chat:', error);
                     if (error.response) {
@@ -216,6 +289,34 @@ function creaNuovaChat() {
         return false
         @endif
     }
+
+    function updateChat() {
+        for (var i = 0; i < chatModificate.length; i++) {
+            var chatContainer = document.getElementById(chatModificate[i]);
+            var newMessage = chatContainer.innerHTML;
+            var chatId = chatContainer.id.replace('-container', '');
+
+            $.ajax({
+                type: 'POST',
+                url: '/updateMessages',
+                data: {
+                    newMessage: newMessage,
+                    chatId: chatId,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    // Puoi gestire la risposta qui se necessario
+                    console.log('Messaggio aggiornato con successo');
+                },
+                error: function(error) {
+                    console.error('Errore durante l\'aggiornamento del messaggio');
+                }
+            });
+
+        }
+    }
+    
+    selectFirstChat();
 
 
 

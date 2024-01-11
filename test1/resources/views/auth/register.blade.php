@@ -43,7 +43,7 @@
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control" name="email"
-                                    value="{{ old('email') }}" required autocomplete="email" placeholder="Nmail">
+                                    value="{{ old('email') }}" required autocomplete="email" placeholder="Email">
                             </div>
                         </div>
 
