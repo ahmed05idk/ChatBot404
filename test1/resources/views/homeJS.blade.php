@@ -59,13 +59,16 @@
 
 
 
-
     function selectFirstChat() {
-        
-        var messaggi = <?php echo json_encode($messaggi); ?>;
-        var initialChatID = messaggi[0].ChatID;
-        
-        cambiaChat(initialChatID);
+        if (checkUserRegistration()) {
+            var messaggi = <?php echo json_encode($messaggi); ?>;
+            var initialChatID = messaggi[0].ChatID;
+
+            cambiaChat(initialChatID);
+        }else{
+            var chatID = 'chat_' + (chatCounter - 1);
+            cambiaChat(chatID);
+        }
     };
  
     creaChatDaDB();
@@ -130,8 +133,12 @@
 
 
     function cambiaChatAllaCreazione() {
+        if(checkUserRegistration()){
         var chatID = 'chat_' + (chatCounter - 1);
         cambiaChat(chatID);
+    }else{
+        cambiaChat(chatID);
+    }
     }
 
     function eliminaChat(event, chatID) {
