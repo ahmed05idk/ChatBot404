@@ -1,9 +1,9 @@
 # Non modificate roba pls che se no è un casino
 
 aggiungere cartella php alle variabili di sistema
+aggiungere node alle variabili di sistema
 
 installare composer
-
 
 aprire xampp
 
@@ -11,22 +11,18 @@ schiacciare su admin di mysqul alla porta 3306
 
 creare database chatBotData
 
-// forse fixato e non serve
-andare nella cartella test1 creare una copia di .env.example e rinominarlo in.env all interno cambiare DB_DATABASE=chatBotData
-
-
 andare nella cartella da cmd
 cd "C:\Users\eindemini\OneDrive - edu.ti.ch\Desktop\Scuola\Terzo anno\Progetto\ChatBot404\test1"
 
 nel cmd fare
 php artisan serve
 
+aprire un altro cmd alla cartella test1 e fare npm run dev
+
 
 una volta avviato andate alla pagina http://127.0.0.1:8000/
 
 schiacciare su generate app key nel riquadro a destra e ricaricare 
-
-
 
 
 
@@ -70,12 +66,13 @@ _token: '{{ csrf_token() }}' // Aggiungi questa linea per includere il token CSR
 todo
 
 
-password dimenticata
 verifica dell email
 cambiare stile barretta scorrimento
 testo che apppare quando sctivi
 pulsante per chiudere barra chat e se è più ristretto di un tot di px si chiude in automatico
 tasto elimina tutte le chat
-se sei  in una chat nuova non puoi crearne un altra senza aver scritto
 code injection
-fare in modo che non si possa eliminare la chat se c'e nè solo una
+creare dominio e cambiare file env se possibile
+logo
+stili
+conferma elimina chat

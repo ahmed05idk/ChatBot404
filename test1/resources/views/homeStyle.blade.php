@@ -122,11 +122,45 @@
     .nav-link {
         display: flex;
     }
+
     .chatButton {
         background-color: #2e8500;
         color: #e60000;
         margin-left: 24%;
         border: 10px;
+    }
+
+    /* Stile generale per tutte le barre di scorrimento */
+    ::-webkit-scrollbar {
+        width: 10px;
+        /* Larghezza della barra di scorrimento */
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: grey;
+        /* Colore della barra di scorrimento */
+        border-radius: 8px;
+        /* Bordi arrotondati */
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+        /* Sfondo della barra di scorrimento */
+    }
+
+    /* Per browser Firefox */
+    /* Adatta le seguenti proprietà secondo le tue preferenze */
+    html {
+        scrollbar-width: thin;
+        scrollbar-color: grey transparent;
+    }
+
+    /* Aggiungi il seguente stile se desideri nascondere la barra di scorrimento quando non è in uso (opzionale) */
+    /* Adatta l'opacità e la transizione secondo le tue preferenze */
+    html:hover {
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+        transition: scrollbar-color 0.5s ease;
     }
     </style>
 </head>

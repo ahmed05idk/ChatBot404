@@ -23,8 +23,8 @@
     <script>
     var chatCounter = 1;
     var chatModificate = [];
+    var ultimaChatCreata = "chat_1";
 
-    
 
     window.addEventListener('DOMContentLoaded', (event) => {
         const textarea = document.getElementById('messaggio-input');
@@ -60,22 +60,28 @@
 
 
     function selectFirstChat() {
+
         if (checkUserRegistration()) {
             var messaggi = <?php echo json_encode($messaggi); ?>;
-            var initialChatID = messaggi[0].ChatID;
+
+            if (messaggi.length == 0) {
+                initialChatID = 'chat_1';
+            } else {
+                var initialChatID = messaggi[0].ChatID;
+            }
+
 
             cambiaChat(initialChatID);
-        }else{
-            var chatID = 'chat_' + (chatCounter - 1);
-            cambiaChat(chatID);
+            return;
         }
+        cambiaChat('chat_1');
     };
- 
+
     creaChatDaDB();
 
     function creaChatDaDB() {
         var messaggi = <?php echo json_encode($messaggi); ?>;
-        if (messaggi.length === 0) {
+        if (messaggi.length == 0) {
             creaNuovaChat();
             return;
         }
@@ -97,79 +103,113 @@
         messaggi.forEach(function(messaggio) {
             document.getElementById(messaggio.ChatID + '-container').innerHTML = messaggio.message;
         });
-        
+
     }
 
 
     function creaNuovaChat(chatIDPassato) {
-        var barraSinistra = document.getElementById('barra-sinistra');
-        var nuovaChatDiv = document.createElement('div');
-        if (chatIDPassato) {
-            var chatID = chatIDPassato;
-        } else {
-            var chatID = 'chat_' + chatCounter;
+        createNewChat = true;
+
+        if (!chatIDPassato) {
+            contenuto = document.getElementById(ultimaChatCreata + '-container');
+            if (contenuto) {
+                if (!contenuto.innerHTML) {
+                    createNewChat = false;
+                }
+            }
         }
-        nuovaChatDiv.id = chatID;
-        nuovaChatDiv.classList.add('chat-item');
-        nuovaChatDiv.innerHTML = 'Nuova Chat ' + chatCounter +
-            '<button class="chatButton" onclick="eliminaChat(event, \'' + chatID +
-            '\')"><i class="fas fa-trash-alt"></i></button>';
 
-        nuovaChatDiv.onclick = function() {
-            cambiaChat(chatID);
-        };
-        barraSinistra.appendChild(nuovaChatDiv);
-        document.getElementById('elenco-chat').appendChild(nuovaChatDiv);
 
-        // Creazione del contenitore dei messaggi per questa chat
-        var chatContainer = document.getElementById('chat-container');
-        var nuovaChatContainer = document.createElement('div');
-        nuovaChatContainer.id = chatID + '-container';
-        nuovaChatContainer.classList.add('chat');
-        chatContainer.appendChild(nuovaChatContainer);
+        if (createNewChat) {
+            var barraSinistra = document.getElementById('barra-sinistra');
+            var nuovaChatDiv = document.createElement('div');
+            if (chatIDPassato) {
+                var chatID = chatIDPassato;
+            } else {
+                var chatID = 'chat_' + chatCounter;
+            }
+            nuovaChatDiv.id = chatID;
 
-        chatCounter++;
+            nuovaChatDiv.classList.add('chat-item');
+            nuovaChatDiv.innerHTML = 'Nuova Chat ' + chatCounter +
+                '<button class="chatButton" onclick="eliminaChat(event, \'' + chatID +
+                '\')"><i class="fas fa-trash-alt"></i></button>';
+
+            nuovaChatDiv.onclick = function() {
+                cambiaChat(chatID);
+            };
+            barraSinistra.appendChild(nuovaChatDiv);
+            document.getElementById('elenco-chat').appendChild(nuovaChatDiv);
+
+            // Creazione del contenitore dei messaggi per questa chat
+            var chatContainer = document.getElementById('chat-container');
+            var nuovaChatContainer = document.createElement('div');
+            nuovaChatContainer.id = chatID + '-container';
+            nuovaChatContainer.classList.add('chat');
+            chatContainer.appendChild(nuovaChatContainer);
+
+
+            chatCounter++;
+            ultimaChatCreata = chatID;
+        }
     }
 
 
     function cambiaChatAllaCreazione() {
-        if(checkUserRegistration()){
         var chatID = 'chat_' + (chatCounter - 1);
         cambiaChat(chatID);
-    }else{
-        cambiaChat(chatID);
-    }
+
+        /*
+        if (checkUserRegistration()) {
+            var chatID = 'chat_' + (chatCounter - 1);
+            cambiaChat(chatID);
+        } else {
+            cambiaChat(chatID);
+        }*/
     }
 
     function eliminaChat(event, chatID) {
-    // Impedisci la propagazione dell'evento al pulsante principale
-    event.stopPropagation();
+        // Impedisci la propagazione dell'evento al pulsante principale
+        event.stopPropagation();
 
-    $.ajax({
-        type: 'POST',
-        url: '/deleteChat',
-        data: {
-            chatId: chatID,
-            _token: '{{ csrf_token() }}'
-        },
-        success: function(data) {
-            // Rimuovi la chat dallo schermo
-            var chatDiv = document.getElementById(chatID);
-            if (chatDiv) {
-                chatDiv.remove();
-            }
 
-            // Rimuovi anche il contenitore dei messaggi della chat
-            var chatContainer = document.getElementById(chatID + '-container');
-            if (chatContainer) {
-                chatContainer.remove();
-            }
-        },
-        error: function(error) {
-            console.error('Errore durante l\'aggiornamento del messaggio');
+        contenuto = document.getElementById(ultimaChatCreata + '-container');
+
+        var elencoChat = document.getElementById('elenco-chat');
+        var numeroDiDivFigli = elencoChat.childElementCount;
+
+        if (numeroDiDivFigli == 1) {
+
+            creaNuovaChat();
         }
-    });
-}
+        if (numeroDiDivFigli != 1 || contenuto.innerHTML) {
+            $.ajax({
+                type: 'POST',
+                url: '/deleteChat',
+                data: {
+                    chatId: chatID,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    // Rimuovi la chat dallo schermo
+                    var chatDiv = document.getElementById(chatID);
+                    if (chatDiv) {
+                        chatDiv.remove();
+                    }
+
+                    // Rimuovi anche il contenitore dei messaggi della chat
+                    var chatContainer = document.getElementById(chatID + '-container');
+                    if (chatContainer) {
+                        chatContainer.remove();
+                    }
+                },
+                error: function(error) {
+                    console.error('Errore durante l\'aggiornamento del messaggio');
+                }
+            });
+        }
+
+    }
 
 
     // Funzione per cambiare la chat attiva
@@ -264,19 +304,20 @@
                 return;
             }
 
-
             // Ottieni l'ID dell'utente lato server usando PHP
-            var idUtente = <?php if(Auth::check()) { echo Auth::user()->id; } else { echo 'null'; } ?>;
+            var idUtente = <?php echo json_encode(Auth::check() ? Auth::user()->id : null); ?>;
 
             // Invia una richiesta AJAX per salvare il contenuto nel database
-            salvaChatNelDatabase(chatID, messages, idUtente)
-                .then(function() {})
-                .catch(function(error) {
-                    console.error('Errore nel salvataggio della chat:', error);
-                    if (error.response) {
-                        console.error('Dettagli dell\'errore:', error.response.data);
-                    }
-                });
+            if (messages) {
+                salvaChatNelDatabase(chatID, messages, idUtente)
+                    .then(function() {})
+                    .catch(function(error) {
+                        console.error('Errore nel salvataggio della chat:', error);
+                        if (error.response) {
+                            console.error('Dettagli dell\'errore:', error.response.data);
+                        }
+                    });
+            }
         });
     }
 
@@ -322,11 +363,8 @@
 
         }
     }
-    
+
     selectFirstChat();
-
-
-
     </script>
 </body>
 

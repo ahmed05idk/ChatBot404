@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,6 +25,9 @@ Route::get('/', function () {
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+
+
 
 // Pagina di Login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -36,18 +40,22 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
 Route::post('/logout', [AuthController::class, 'logout']);
 
-Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+
+
+
+Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('password/reset/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [ForgotPasswordController::class, 'reset'])->name('password.update');
+
+
+
+
+
 
 Route::post('/messages', [ChatController::class, 'store']);
 
-/*
-Route::get('/', function () {
-    $userId = Auth::id();
 
-    $mess = DB::table('messages')->select('message')->where('userCreationId', $userId)->get();
-    return view('home', compact('mess'));
-});
-*/
 
 Route::get('/', function () {
     $userId = Auth::id();
@@ -102,3 +110,6 @@ Route::post('/deleteChat', function (Request $request) {
     // Se l'utente non è coinvolto nella chat, restituisci false o un messaggio di errore
     return false;
 });
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
