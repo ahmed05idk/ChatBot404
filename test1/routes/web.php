@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ Route::get('/', function () {
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-
+use App\Http\Controllers\Auth\VerificationController;
 
 
 // Pagina di Login
@@ -50,6 +51,25 @@ Route::post('password/reset', [ForgotPasswordController::class, 'reset'])->name(
 
 
 
+
+
+
+
+
+
+//Route::post('/sendVerificationEmail', [VerificationController::class, 'sendVerificationEmail'])->name('sendVerificationEmail');
+
+Route::post('/sendVerificationEmail', function (Request $request) {
+    $email = $request->input('email');
+    
+    // Crea un'istanza del VerificationController
+    $verificationController = new VerificationController();
+
+    // Chiama il metodo per ottenere il codice di verifica
+    $verificationCode = $verificationController->sendVerificationEmail($email);
+    // Restituisci solo il JSON
+    return ['success' => true, 'verification_code' => $verificationCode];
+});
 
 
 
@@ -110,6 +130,4 @@ Route::post('/deleteChat', function (Request $request) {
     // Se l'utente non è coinvolto nella chat, restituisci false o un messaggio di errore
     return false;
 });
-Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

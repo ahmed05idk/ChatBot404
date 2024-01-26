@@ -98,6 +98,14 @@ return [
             'throttle' => 60,
         ],
     ],
+	
+	
+	
+	'verification' => [
+		'expire' => 60,
+		'redirect' => '/',  // Assicurati che questa sia configurata correttamente
+	],
+
 
     /*
     |--------------------------------------------------------------------------

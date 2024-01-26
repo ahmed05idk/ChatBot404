@@ -76,3 +76,4 @@ creare dominio e cambiare file env se possibile
 logo
 stili
 conferma elimina chat
+creare un bella mail per il codice in verificationController

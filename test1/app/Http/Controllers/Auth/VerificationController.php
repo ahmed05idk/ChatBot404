@@ -2,40 +2,29 @@
 
 namespace App\Http\Controllers\Auth;
 
+
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Support\Facades\Mail;
+
+
 
 class VerificationController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Email Verification Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling email verification for any
-    | user that recently registered with the application. Emails may also
-    | be re-sent if the user didn't receive the original email message.
-    |
-    */
-
-    use VerifiesEmails;
-
-    /**
-     * Where to redirect users after verification.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function sendVerificationEmail($email)
     {
-        $this->middleware('auth');
-        $this->middleware('signed')->only('verify');
-        $this->middleware('throttle:6,1')->only('verify', 'resend');
+        // Genera un codice di verifica casuale
+        $verificationCode = rand(100000, 999999);
+
+        // Personalizza il corpo del messaggio a tuo piacimento
+        $message = "Il tuo codice di verifica è: $verificationCode";
+
+        // Invia l'email di verifica
+        Mail::raw($message, function ($mail) use ($email) {
+            $mail->to($email)->subject('Verifica Codice');
+        });
+
+        // Ritorna il codice di verifica
+        return $verificationCode;
     }
 }
+   
