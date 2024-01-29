@@ -66,13 +66,11 @@ _token: '{{ csrf_token() }}' // Aggiungi questa linea per includere il token CSR
 todo
 
 
-verifica dell email
-cambiare stile barretta scorrimento
-testo che apppare quando sctivi
+
+testo che apppare quando bot risponde sctivi
 pulsante per chiudere barra chat e se è più ristretto di un tot di px si chiude in automatico
 tasto elimina tutte le chat
 code injection
-creare dominio e cambiare file env se possibile
 logo
 stili
 conferma elimina chat
