@@ -56,7 +56,6 @@ Route::post('password/reset', [ForgotPasswordController::class, 'reset'])->name(
 
 
 
-
 //Route::post('/sendVerificationEmail', [VerificationController::class, 'sendVerificationEmail'])->name('sendVerificationEmail');
 
 Route::post('/sendVerificationEmail', function (Request $request) {
