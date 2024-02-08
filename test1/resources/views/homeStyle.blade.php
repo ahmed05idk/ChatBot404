@@ -162,6 +162,69 @@
         scrollbar-color: transparent transparent;
         transition: scrollbar-color 0.5s ease;
     }
+
+
+
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .popup {
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+    }
+
+    /* Stile per i pulsanti Conferma e Annulla */
+    .btn-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .confirm-btn,
+    .cancel-btn {
+      padding: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+    }
+
+    .confirm-btn {
+      background-color: #4caf50;
+    }
+
+    .cancel-btn {
+      background-color: #f44336;
+    }
+
+
+
+
+
+
+
+
+
     </style>
 </head>
 

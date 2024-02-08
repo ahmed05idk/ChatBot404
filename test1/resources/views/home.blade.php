@@ -16,7 +16,8 @@
     <div id="contenitore-chat">
         <div id="barra-sinistra">
             <h2>Le Tue Chat</h2>
-            <button onclick="creaNuovaChat(false); cambiaChatAllaCreazione();" style="margin: 0.5rem;">Nuova Chat</button>
+            <button onclick="creaNuovaChat(false); cambiaChatAllaCreazione();" style="margin: 0.5rem;">Nuova
+                Chat</button>
             <div id="elenco-chat"></div>
         </div>
         <div id="barra-destra">
@@ -26,7 +27,7 @@
                     <span>Benvenuto: {{ Auth::user()->name }}</span>
                     @endif
                 </div>
-                
+
                 <div class="login-register">
                     @if (Auth::check())
                     <a class="nav-link" href="{{ route('logout') }}"
@@ -53,6 +54,20 @@
         </div>
     </div>
 
+
+
+
+    <div class="overlay" id="overlay">
+        <!-- Contenuto del popup -->
+        <div class="popup">
+            <h2>Eliminazione Chat</h2>
+            <p>Confermi l'eliminazione di questa chat?</p>
+            <div class="btn-container">
+                <button id="conferma-btn" class="confirm-btn">Conferma</button>
+                <button id="annulla-btn" class="cancel-btn">Annulla</button>
+            </div>
+        </div>
+    </div>
 
 </body>
 

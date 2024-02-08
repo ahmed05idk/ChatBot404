@@ -70,7 +70,6 @@ todo
 testo che apppare quando bot risponde sctivi
 pulsante per chiudere barra chat e se è più ristretto di un tot di px si chiude in automatico
 tasto elimina tutte le chat
-code injection
 logo
 stili
 conferma elimina chat
