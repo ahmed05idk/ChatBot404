@@ -32,20 +32,20 @@
                 </div>
 
                 <div class="login-register">
-    <span onclick="toggleOptions()" style="cursor: pointer;">Opzioni</span>
-    <div id="opzioni">
-        @if (Auth::check())
-            <a class="nav-link" href="{{ route('logout') }}"
-                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-        @else
-            <a href="{{ route('login') }}" class="nav-link" style="padding: 0.5rem;">Login</a>
-            <a href="{{ route('register') }}" class="nav-link" style="padding: 0.5rem;">Register</a>
-        @endif
-    </div>
-</div>
+                    <span onclick="toggleOptions()" style="cursor: pointer; ">Opzioni</span>
+                    <div id="opzioni">
+                        @if (Auth::check())
+                        <a class="nav-link" href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                        @else
+                        <a href="{{ route('login') }}" class="nav-link" style="padding: 0.5rem;">Login</a>
+                        <a href="{{ route('register') }}" class="nav-link" style="padding: 0.5rem;">Register</a>
+                        @endif
+                    </div>
+                </div>
             </div>
 
             <h2 id="tua-chat-header">Chat</h2>

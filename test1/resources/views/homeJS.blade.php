@@ -104,11 +104,11 @@
     }
 
 
-    function creaNuovaChat(chatIDPassato) {
+    function creaNuovaChat(chatIDPassato, daEliminare) {
         createNewChat = true;
 
         if (!chatIDPassato) {
-            if (chatIDPassato !== "EliminaUnicaChat") {
+            if (daEliminare !== "EliminaUnicaChat") {
             contenuto = document.getElementById(ultimaChatCreata + '-container');
             if (contenuto) {
                 if (!contenuto.innerHTML) {
@@ -120,6 +120,7 @@
     
 
     if (createNewChat) {
+        console.log("S")
         var barraSinistra = document.getElementById('barra-sinistra');
         var nuovaChatDiv = document.createElement('div');
         if (chatIDPassato) {
@@ -220,8 +221,9 @@
         
         confermaBtn.addEventListener('click', function confermaClick() {
             //if (contenuto.innerHTML) {
+                console.log(numeroDiDivFigli)
                 if (numeroDiDivFigli == 1) {
-                    creaNuovaChat("EliminaUnicaChat");
+                    creaNuovaChat("","EliminaUnicaChat");
                     cambiaChat(ultimaChatCreata);
                 }
             //}
