@@ -45,7 +45,6 @@
     #barra-sopra {
         display: flex;
         justify-content: flex-end;
-        /* Cambiato da space-between a flex-end */
         align-items: center;
         margin-bottom: 20px;
         height: 30px;
@@ -91,7 +90,7 @@
         background-color: #fff;
         padding: 20px;
         box-sizing: border-box;
-        z-index: 1000;
+        /*z-index: 1000;*/
         align-items: flex-end;
         min-height: 9%;
     }
@@ -133,36 +132,29 @@
     /* Stile generale per tutte le barre di scorrimento */
     ::-webkit-scrollbar {
         width: 10px;
-        /* Larghezza della barra di scorrimento */
     }
 
     ::-webkit-scrollbar-thumb {
         background-color: grey;
-        /* Colore della barra di scorrimento */
         border-radius: 8px;
-        /* Bordi arrotondati */
     }
 
     ::-webkit-scrollbar-track {
         background-color: transparent;
-        /* Sfondo della barra di scorrimento */
     }
 
-    /* Per browser Firefox */
-    /* Adatta le seguenti proprietà secondo le tue preferenze */
+
     html {
         scrollbar-width: thin;
         scrollbar-color: grey transparent;
     }
 
-    /* Aggiungi il seguente stile se desideri nascondere la barra di scorrimento quando non è in uso (opzionale) */
-    /* Adatta l'opacità e la transizione secondo le tue preferenze */
+
     html:hover {
         scrollbar-width: thin;
         scrollbar-color: transparent transparent;
         transition: scrollbar-color 0.5s ease;
     }
-
 
 
 
@@ -184,6 +176,7 @@
       border-radius: 5px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       position: relative;
+      z-index: 1000;
     }
 
     .close-btn {
@@ -193,7 +186,6 @@
       cursor: pointer;
     }
 
-    /* Stile per i pulsanti Conferma e Annulla */
     .btn-container {
       display: flex;
       justify-content: space-between;
@@ -216,8 +208,49 @@
     .cancel-btn {
       background-color: #f44336;
     }
+    #freccia {
+    position: fixed;
+    top: 50%;
+    left: 15rem;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 50px;
+    border: none;
+    z-index: 1;
+    transition: left 0.5s ease;
+    background: none;
+}
 
+#freccia.chiusa {
+    left: 0;
+    transform: translate(-0%, -50%) rotateY(180deg);
+}
 
+#barra-sinistra {
+    overflow: hidden;
+    transition: width 0.5s ease;
+}
+
+#barra-sinistra.chiudi {
+    width: 0;
+    padding: 0;
+    margin: 0;
+}
+
+#opzioni {
+    display: none;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid black;
+    margin-left: 20px; /* Spostato leggermente a sinistra */
+    margin-top: 30px; /* Spostato leggermente più in basso */
+    position: absolute;
+    right: 2%;
+}
+
+.opzioni-visible {
+    display: block;
+}
 
 
 

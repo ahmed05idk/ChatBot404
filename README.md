@@ -68,9 +68,9 @@ todo
 
 
 testo che apppare quando bot risponde sctivi
-pulsante per chiudere barra chat e se è più ristretto di un tot di px si chiude in automatico
-tasto elimina tutte le chat
 logo
 stili
 conferma elimina chat
-creare un bella mail per il codice in verificationController
+creare un bella mail che i arriva per il codice di verifica nel file verificationController
+impostazioni con all interno login, logout, tornare alla pagina di selezione tipo chatbot e altro
+tasto elimina tutte le chat

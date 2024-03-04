@@ -17,11 +17,6 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
-
-
-
-
-
     <script>
     var chatCounter = 1;
     var chatModificate = [];
@@ -122,7 +117,7 @@
             }
         }
     }
-    console.log("createNewChat");
+    
 
     if (createNewChat) {
         var barraSinistra = document.getElementById('barra-sinistra');
@@ -222,19 +217,16 @@
         var confermaBtn = document.getElementById('conferma-btn');
         var annullaBtn = document.getElementById('annulla-btn');
 
-
-
-
-
+        
         confermaBtn.addEventListener('click', function confermaClick() {
-            if (contenuto.innerHTML) {
+            //if (contenuto.innerHTML) {
                 if (numeroDiDivFigli == 1) {
                     creaNuovaChat("EliminaUnicaChat");
                     cambiaChat(ultimaChatCreata);
                 }
-            }
+            //}
 
-            if (numeroDiDivFigli != 1 || contenuto.innerHTML) {
+            //if (numeroDiDivFigli != 1 || contenuto.innerHTML) {
                 $.ajax({
                     type: 'POST',
                     url: '/deleteChat',
@@ -263,7 +255,7 @@
                         console.error('Errore durante l\'aggiornamento del messaggio');
                     }
                 });
-            }
+            //}
         });
 
         annullaBtn.addEventListener('click', function annullaClick() {
@@ -441,6 +433,62 @@
 
         }
     }
+
+    function chiudiBarraSinistra() {
+    var barraSinistra = document.getElementById('barra-sinistra');
+    var freccia = document.getElementById('freccia');
+    barraSinistra.classList.toggle('chiudi'); // Aggiungi o rimuovi la classe 'chiudi'
+    freccia.classList.toggle('chiusa'); // Aggiungi o rimuovi la classe 'chiusa' alla freccia
+}
+
+
+    function controllaDimensioniFinestra() {
+            var larghezzaFinestra = window.innerWidth;
+            var barraSinistra = document.getElementById('barra-sinistra');
+
+            if (larghezzaFinestra < 500) {
+                barraSinistra.classList.add('chiudi');
+            } else {
+                barraSinistra.classList.remove('chiudi');
+            }
+        }
+
+        // Aggiungi un ascoltatore di eventi per l'evento resize della finestra
+        window.addEventListener('resize', controllaDimensioniFinestra);
+
+        // Chiama la funzione all'inizio per controllare le dimensioni iniziali della finestra
+        controllaDimensioniFinestra();
+
+
+
+        function toggleOptions() {
+        var optionsDiv = document.getElementById("opzioni");
+        if (optionsDiv.style.display === "none") {
+            optionsDiv.style.display = "block";
+        } else {
+            optionsDiv.style.display = "none";
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     selectFirstChat();
     </script>

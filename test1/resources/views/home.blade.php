@@ -14,12 +14,15 @@
 
 <body>
     <div id="contenitore-chat">
-        <div id="barra-sinistra">
+        <div id="barra-sinistra" class="aperta">
             <h2>Le Tue Chat</h2>
-            <button onclick="creaNuovaChat(false); cambiaChatAllaCreazione();" style="margin: 0.5rem;">Nuova
-                Chat</button>
+            <button onclick="creaNuovaChat(false); cambiaChatAllaCreazione();"
+                style="margin: 0.5rem;">NuovaChat</button>
             <div id="elenco-chat"></div>
         </div>
+
+        <button id="freccia" class='fas fa-angle-left' style='font-size:36px' onclick="chiudiBarraSinistra()"></button>
+
         <div id="barra-destra">
             <div id="barra-sopra" style="display: flex; justify-content: space-between;">
                 <div class="nav-link" style="padding: 0.5rem;">
@@ -29,17 +32,20 @@
                 </div>
 
                 <div class="login-register">
-                    @if (Auth::check())
-                    <a class="nav-link" href="{{ route('logout') }}"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                    @else
-                    <a href="{{ route('login') }}" class="nav-link" style="padding: 0.5rem;">Login</a>
-                    <a href="{{ route('register') }}" class="nav-link" style="padding: 0.5rem;">Register</a>
-                    @endif
-                </div>
+    <span onclick="toggleOptions()" style="cursor: pointer;">Opzioni</span>
+    <div id="opzioni">
+        @if (Auth::check())
+            <a class="nav-link" href="{{ route('logout') }}"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+        @else
+            <a href="{{ route('login') }}" class="nav-link" style="padding: 0.5rem;">Login</a>
+            <a href="{{ route('register') }}" class="nav-link" style="padding: 0.5rem;">Register</a>
+        @endif
+    </div>
+</div>
             </div>
 
             <h2 id="tua-chat-header">Chat</h2>
@@ -54,11 +60,7 @@
         </div>
     </div>
 
-
-
-
     <div class="overlay" id="overlay">
-        <!-- Contenuto del popup -->
         <div class="popup">
             <h2>Eliminazione Chat</h2>
             <p>Confermi l'eliminazione di questa chat?</p>
