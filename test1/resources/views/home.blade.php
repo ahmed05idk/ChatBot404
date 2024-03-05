@@ -35,15 +35,17 @@
                     <span onclick="toggleOptions()" style="cursor: pointer; ">Opzioni</span>
                     <div id="opzioni">
                         @if (Auth::check())
-                        <a class="nav-link" href="{{ route('logout') }}"
+                        <a class="nav-link opzione" href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
                         @else
-                        <a href="{{ route('login') }}" class="nav-link" style="padding: 0.5rem;">Login</a>
-                        <a href="{{ route('register') }}" class="nav-link" style="padding: 0.5rem;">Register</a>
+                        <a href="{{ route('login') }}" class="nav-link opzione">Login</a>
+                        <a href="{{ route('register') }}" class="nav-link opzione">Register</a>
                         @endif
+                        <div class="nav-link opzione" onclick="mostraPopupSvuotaChat()">Elimina tutte le chat</div>
+                        <div class="nav-link opzione"></div><!-- inserire così opzioni -->
                     </div>
                 </div>
             </div>
@@ -60,13 +62,24 @@
         </div>
     </div>
 
-    <div class="overlay" id="overlay">
+    <div class="overlay overlayPopup" id="overlay">
         <div class="popup">
             <h2>Eliminazione Chat</h2>
             <p>Confermi l'eliminazione di questa chat?</p>
             <div class="btn-container">
                 <button id="conferma-btn" class="confirm-btn">Conferma</button>
                 <button id="annulla-btn" class="cancel-btn">Annulla</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay2 overlayPopup" id="overlay2">
+        <div class="popup">
+            <h2>Eliminazione di tutte le chat</h2>
+            <p>Vuoi procedere ed eliminare tutte le chat</p>
+            <div class="btn-container">
+                <button id="conferma-btn" class="confirm-btn" onclick="svuotaChat()">Conferma</button>
+                <button id="annulla-btn" class="cancel-btn" onclick="chiudiPopup2()">Annulla</button>
             </div>
         </div>
     </div>

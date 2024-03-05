@@ -158,7 +158,7 @@
 
 
 
-    .overlay {
+    .overlayPopup {
       display: none;
       position: fixed;
       top: 0;
@@ -240,7 +240,6 @@
 #opzioni {
     display: none;
     background-color: white;
-    padding: 10px;
     border: 1px solid black;
     margin-left: 20px; /* Spostato leggermente a sinistra */
     margin-top: 30px; /* Spostato leggermente più in basso */
@@ -252,8 +251,13 @@
     display: block;
 }
 
-
-
+.opzione {
+border: 1px solid black;
+padding: 5px 10px;
+}
+.opzione:hover {
+background-color:#2e8500;
+}
 
 
 

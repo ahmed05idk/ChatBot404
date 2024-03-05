@@ -70,7 +70,7 @@ todo
 testo che apppare quando bot risponde sctivi
 logo
 stili
-conferma elimina chat
 creare un bella mail che i arriva per il codice di verifica nel file verificationController
-impostazioni con all interno login, logout, tornare alla pagina di selezione tipo chatbot e altro
+mettere nelle opzioni che ti torna alla pagina scelta tipo chatbot
 tasto elimina tutte le chat
+se scrivo in chat 1 elimino la 2 non posso più scrivere o selezionare chat 3 problema di id
