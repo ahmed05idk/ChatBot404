@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
-
-
 
 class VerificationController extends Controller
 {
@@ -15,16 +12,14 @@ class VerificationController extends Controller
         // Genera un codice di verifica casuale
         $verificationCode = rand(100000, 999999);
 
-        // Personalizza il corpo del messaggio a tuo piacimento
-        $message = "Il tuo codice di verifica è: $verificationCode";
-
-        // Invia l'email di verifica
-        Mail::raw($message, function ($mail) use ($email) {
-            $mail->to($email)->subject('Verifica Codice');
+        // Invia l'email di verifica utilizzando un template HTML
+        Mail::send('verificationEmail', ['verificationCode' => $verificationCode], function ($mail) use ($email) {
+            $mail->to($email)
+                ->subject('Codice di verifica')
+                ->from('help.chatbot404@gmail.com', 'ChatBot404');
         });
 
         // Ritorna il codice di verifica
         return $verificationCode;
     }
 }
-   

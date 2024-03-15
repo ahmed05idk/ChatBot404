@@ -2,19 +2,21 @@
 
 @section('content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col">
             <div class="card">
 
                 <div class="card-body">
-                    @if(session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                    @endif
 
+                    <div class="row" style="height: 40px">
+                        <a href="/" class="back-button">
+                            <i class="fa fa-arrow-left"></i>
+                        </a>
+                    </div>
                     @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>
@@ -24,111 +26,128 @@
                         </ul>
                     </div>
                     @endif
-                    <a href="/" class="back-button">
-                        <i class="fa fa-arrow-left"></i>
-                    </a>
+                    <div class="row" style="height: 20px; margin-bottom: 10px">
+                        <div id="errore" style="color:red; text-align:center;"></div>
+                        <div id="successo" style="color:green; text-align:center;"></div>
+
+                    </div>
 
                     <form method="POST" action="{{ route('register') }}" id="campi">
                         @csrf
 
                         <div class="form-group row">
 
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}"
-                                    required autocomplete="name" placeholder="Name" autofocus>
+                            <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}"
+                                required autocomplete="name" placeholder="Name" autofocus>
+
+                        </div>
+
+                        <div class="container-fluid" style="padding: 0 !important">
+                            <div class="form-group row">
+
+                                <div class="col emailAndVer">
+                                    <input id="email" type="email" class="form-control" name="email"
+                                        value="{{ old('email') }}" required autocomplete="email" placeholder="Email">
+                                </div>
+                                <div class="col-4 emailAndVer">
+                                    <button type="button" class="btn btn-primary" id="sendVerificationCode"
+                                        onclick="sendVerificationEmail()">
+                                        Invia Codice
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-group row">
+                            <input id="password" type="password" class="form-control" name="password" required
+                                autocomplete="new-password" placeholder="Password">
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email"
-                                    value="{{ old('email') }}" required autocomplete="email" placeholder="Email">
-                            </div>
                         </div>
 
                         <div class="form-group row">
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required
-                                    autocomplete="new-password" placeholder="Password">
-                            </div>
+
+                            <input id="password-confirm" type="password" class="form-control"
+                                name="password_confirmation" required autocomplete="new-password"
+                                placeholder="Confirm Password">
+
                         </div>
+
+                        <div id="verificationBox" class="form-group row">
+                            <input id="verification_code" type="text" class="form-control" name="verification_code"
+                                required placeholder="Codice di verifica"
+                                onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        </div>
+
 
                         <div class="form-group row">
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control"
-                                    name="password_confirmation" required autocomplete="new-password"
-                                    placeholder="Confirm Password">
-                            </div>
-                        </div>
-
-                        <div id="verificationBox" class="form-group row mb-0">
-                            <div id="verificationBoxInterno">
-                                <input id="verification_code" type="text" class="form-control" name="verification_code"
-                                    required placeholder="Codice di verifica">
-                                <button type="button" class="btn btn-primary" id="sendVerificationCode"
-                                    onclick="sendVerificationEmail()">
-                                    Invia Codice
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary" onclick="registrati()">
-                                    Registrati
-                                </button>
-                            </div>
+                            <button type="submit" class="btn btn-primary" onclick="registrati()">
+                                Registrati
+                            </button>
                         </div>
                     </form>
                 </div>
+                <div class="row" style="text-align: center;  padding-top:10px">
+            <a href="/register" class="btn-link" style="text-decoration: none; text-align: center;"
+                id="changeLogReg">Hai già un account? Accedi</a>
+        </div>
             </div>
         </div>
     </div>
 </div>
 <script>
-var verificationCode = '';
+var verificationCode; // Dichiarazione globale
 
 function sendVerificationEmail() {
+    var email = $('#email').val();
+
+    // Verifica se l'email è valida utilizzando un'espressione regolare
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        document.getElementById('successo').innerHTML = "";
+        document.getElementById('errore').innerHTML = "<i class='fas fa-exclamation-triangle'></i>" +
+            " Email non valida";
+        return; // Esce dalla funzione se l'email non è valida
+    }
+    document.getElementById('errore').innerHTML = "";
+    document.getElementById('successo').innerHTML = "&#10004 Email inviata con successo!";
+
     $.ajax({
         type: 'POST',
         url: '/sendVerificationEmail',
         data: {
-            email: $('#email').val(),
+            email: email,
             _token: '{{ csrf_token() }}'
         },
         dataType: 'json',
         success: function(response) {
             if (response.success) {
-                console.log('Mail inviata con successo');
-                verificationCode = response.verification_code;
-                console.log('Codice di verifica: ' + verificationCode);
-            } else {
-                console.error('Errore durante l\'invio della mail');
-            }
+                verificationCode = response.verification_code; // Assegna il valore di verificationCode
+                console.log(verificationCode);
+            } else {}
         },
         error: function(error) {
             console.error('Errore durante l\'invio della mail: ' + error);
         }
     });
 }
-
 function registrati() {
-    // Ottieni il codice inserito dall'utente
-
     var enteredCode = $('#verification_code').val();
+    console.log(enteredCode + " " + verificationCode);
     
-    if (enteredCode == verificationCode) {
+    
+    if (verificationCode == enteredCode) {
         console.log('Codice di verifica corretto');
-
+        document.getElementById('errore').innerHTML = "";
         return;
     } else {
-        console.error('Codice di verifica errato');
+        document.getElementById('successo').innerHTML = "";
+        document.getElementById('errore').innerHTML = "<i class='fas fa-exclamation-triangle'></i> " + " Codice di verifica errato!";
         event.preventDefault();
     }
 }
+
+
 </script>
 
 @endsection

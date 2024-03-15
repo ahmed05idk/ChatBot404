@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <style>
     #containerPrincipale,
     #rigaPrincipale,
@@ -141,51 +142,32 @@
     }
 
     #barra-sinistra {
-    width: 300px;
-    height: 100vh;
-    background-color: #333;
-    color: #fff;
-    padding: 20px;
-    overflow-y: auto;
-    transition: transform 0.5s ease;
-    text-align: center;
-}
-
-#barra-sinistra {
-    width: 300px;
-    height: 100vh;
-    background-color: #333;
-    color: #fff;
-    padding: 20px;
-    overflow-y: auto;
-    transition: transform 0.5s ease, width 0.5s ease; /* Aggiungi una transizione alla larghezza */
-}
-
-#barra-sinistra.chiudi {
-    transform: translateX(-300px);
-    width: 0;
-    padding: 0;
-}
-
-
-/*
-    #barra-sinistra {
-        overflow: hidden;
-        transition: width 0.5s ease;
         width: 300px;
+        height: 100vh;
         background-color: #333;
         color: #fff;
         padding: 20px;
         overflow-y: auto;
+        transition: transform 0.5s ease;
+        text-align: center;
+    }
+
+    #barra-sinistra {
+        width: 300px;
         height: 100vh;
+        background-color: #333;
+        color: #fff;
+        padding: 20px;
+        overflow-y: auto;
+        transition: transform 0.5s ease, width 0.5s ease;
+        /* Aggiungi una transizione alla larghezza */
     }
 
     #barra-sinistra.chiudi {
+        transform: translateX(-300px);
         width: 0;
         padding: 0;
-        margin: 0;
-        min-width: 0;
-    }*/
+    }
 
 
     .chat-item {

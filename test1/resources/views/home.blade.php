@@ -22,7 +22,7 @@
             <div class="col-1" id="barra-sinistra">
                 <h2>Le Tue Chat</h2>
                 <button onclick="creaNuovaChat(false); cambiaChatAllaCreazione();" id="pulsanteNuovaChat" class="btn btn-success"
-                    style="margin: 0.5rem;">NuovaChat</button>
+                    style="margin: 0.5rem;">Crea Nuova Chat</button>
                 <div id="elenco-chat"></div>
             </div>
 

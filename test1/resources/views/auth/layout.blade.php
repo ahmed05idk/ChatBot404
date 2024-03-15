@@ -23,12 +23,15 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 97vh;
+        height: 96vh;
+        padding: 20px;
+    }
+    .container-fluid {
+        padding: 20px !important;
     }
 
     .card {
         width: 400px;
-        padding: 20px;
         border: 1px solid #ced4da;
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -64,6 +67,7 @@
     .form-control {
         width: 70%;
         height: 40px;
+        margin-bottom: 20px;
     }
 
     .form-control::placeholder {
@@ -72,10 +76,10 @@
 
     .back-button {
         display: inline-block;
-        margin-bottom: 20px;
         text-decoration: none;
         color: #000;
         font-size: 30px;
+        width: 40px;
     }
     #wrongPassMail{
         color: red;
@@ -86,9 +90,18 @@
     justify-content: center;
 
 }
+.emailAndVer{
+    padding: 0 !important;
+}
+.row{
+    margin:0 !important;
+}   
 
-
-
+#changeLogReg{
+        padding: 2px 0 5px 0;
+        border-top: 1px solid black;
+       
+}
 
 
 

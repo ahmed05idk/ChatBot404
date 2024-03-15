@@ -17,8 +17,6 @@ cd "C:\Users\eindemini\OneDrive - edu.ti.ch\Desktop\Scuola\Terzo anno\Progetto\C
 nel cmd fare
 php artisan serve
 
-aprire un altro cmd alla cartella test1 e fare npm run dev
-
 
 una volta avviato andate alla pagina http://127.0.0.1:8000/
 
@@ -63,13 +61,25 @@ php artisan migrate
 _token: '{{ csrf_token() }}' // Aggiungi questa linea per includere il token CSRF da errore se non lo metti in una chiamata Ajax
 
 
+
+traduzioni nel file validation.php alcune rerrate
+
+
 todo
 
 
 
 testo che apppare quando bot risponde sctivi
 logo
-stili
-creare un bella mail che i arriva per il codice di verifica nel file verificationController
+creare un bella mail che i arriva per il codice di verifica nel file verificationEmail in view
 mettere nelle opzioni che ti torna alla pagina scelta tipo chatbot
-bug bisogna cliccare 2 volte su opzioni
+sfondino a login e rigister
+input non è fisso in basso
+non si vede barra di scorrimento
+
+register non crea remember token
+
+
+
+mail: help.chatbot404@gmail.com
+pass: ChatBot404
