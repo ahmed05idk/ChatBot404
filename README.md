@@ -72,5 +72,4 @@ logo
 stili
 creare un bella mail che i arriva per il codice di verifica nel file verificationController
 mettere nelle opzioni che ti torna alla pagina scelta tipo chatbot
-tasto elimina tutte le chat
-se scrivo in chat 1 elimino la 2 non posso più scrivere o selezionare chat 3 problema di id
+bug bisogna cliccare 2 volte su opzioni

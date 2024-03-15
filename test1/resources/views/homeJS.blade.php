@@ -12,10 +12,8 @@
 
 <body>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
 
     <script>
     var chatCounter = 1;
@@ -105,40 +103,42 @@
 
 
     function creaNuovaChat(chatIDPassato, daEliminare) {
-        createNewChat = true;
+        var createNewChat = true;
 
         if (!chatIDPassato) {
             if (daEliminare !== "EliminaUnicaChat") {
-                contenuto = document.getElementById(ultimaChatCreata + '-container');
-                if (contenuto) {
-                    if (!contenuto.innerHTML) {
-                        createNewChat = false;
-                    }
+                var contenuto = document.getElementById(ultimaChatCreata + '-container');
+                if (contenuto && !contenuto.innerHTML) {
+                    createNewChat = false;
                 }
             }
         }
 
-
         if (createNewChat) {
             var barraSinistra = document.getElementById('barra-sinistra');
             var nuovaChatDiv = document.createElement('div');
+            var chatID;
             if (chatIDPassato) {
-                var chatID = chatIDPassato;
+                chatID = chatIDPassato;
             } else {
-                var chatID = 'chat_' + chatCounter;
+                chatID = 'chat_' + chatCounter;
             }
             nuovaChatDiv.id = chatID;
-
             nuovaChatDiv.classList.add('chat-item');
-            nuovaChatDiv.innerHTML = 'Nuova Chat ' + chatCounter +
+            nuovaChatDiv.innerHTML = '<div style="display: flex; justify-content: space-between;">' +
+                '<span>Nome chat generata ' + chatCounter + '</span>' +
                 '<button class="chatButton" onclick="eliminaChat(event, \'' + chatID +
-                '\')"><i class="fas fa-trash-alt"></i></button>';
-
+                '\')"><i class="fas fa-trash-alt"></i></button></div>';
             nuovaChatDiv.onclick = function() {
                 cambiaChat(chatID);
             };
-            barraSinistra.appendChild(nuovaChatDiv);
-            document.getElementById('elenco-chat').appendChild(nuovaChatDiv);
+
+            var elencoChat = document.getElementById('elenco-chat');
+            if (elencoChat.firstChild) {
+                elencoChat.insertBefore(nuovaChatDiv, elencoChat.firstChild);
+            } else {
+                elencoChat.appendChild(nuovaChatDiv);
+            }
 
             // Creazione del contenitore dei messaggi per questa chat
             var chatContainer = document.getElementById('chat-container');
@@ -147,16 +147,35 @@
             nuovaChatContainer.classList.add('chat');
             chatContainer.appendChild(nuovaChatContainer);
 
-
             chatCounter++;
             ultimaChatCreata = chatID;
         }
     }
 
 
+
     function cambiaChatAllaCreazione() {
         var chatID = 'chat_' + (chatCounter - 1);
         cambiaChat(chatID);
+    }
+
+    function chatPiuGrande() {
+        var chatContainer = document.getElementById('chat-container');
+        var divs = chatContainer.getElementsByTagName('div');
+        var maxId = 0;
+        var maxIdNumber = 0;
+
+        for (var i = 0; i < divs.length; i++) {
+            var divId = divs[i].id;
+            if (divId.startsWith('chat_')) {
+                var idNumber = parseInt(divId.split('_')[1]);
+                if (idNumber > maxIdNumber) {
+                    maxIdNumber = idNumber;
+                    maxId = idNumber;
+                }
+            }
+        }
+        return 'chat_' + maxId;
     }
 
 
@@ -178,15 +197,12 @@
 
 
         confermaBtn.addEventListener('click', function confermaClick() {
-            //if (contenuto.innerHTML) {
 
             if (numeroDiDivFigli == 1) {
                 creaNuovaChat("", "EliminaUnicaChat");
                 cambiaChat(ultimaChatCreata);
             }
-            //}
 
-            //if (numeroDiDivFigli != 1 || contenuto.innerHTML) {
             $.ajax({
                 type: 'POST',
                 url: '/deleteChat',
@@ -194,7 +210,7 @@
                     chatId: chatID,
                     _token: '{{ csrf_token() }}'
                 },
-                
+
                 success: function(data) {
                     // Rimuovi la chat dallo schermo
                     var chatDiv = document.getElementById(chatID);
@@ -211,6 +227,9 @@
 
                     // Rimuovi l'event listener dopo l'esecuzione
                     confermaBtn.removeEventListener('click', confermaClick);
+
+                    cambiaChat(chatPiuGrande());
+
                 },
                 error: function(error) {
                     console.error('Errore durante l\'aggiornamento del messaggio');
@@ -247,7 +266,7 @@
             chatContainer.classList.add('active-chat');
 
             // Aggiorna l'intestazione con il nome della chat corrente
-            document.getElementById('tua-chat-header').textContent = document.getElementById(chatID).textContent;
+            //document.getElementById('tua-chat-header').textContent = document.getElementById(chatID).textContent;
 
             // Ripristina il messaggio precedente per la chat corrente
             var inputMessaggio = document.getElementById('messaggio-input');
@@ -408,7 +427,7 @@
         var barraSinistra = document.getElementById('barra-sinistra');
         var freccia = document.getElementById('freccia');
 
-        if (larghezzaFinestra < 500) {
+        if (larghezzaFinestra < 800) {
             barraSinistra.classList.add('chiudi');
             freccia.classList.add('chiusa');
         } else {
@@ -426,14 +445,25 @@
     controllaDimensioniFinestra();
 
 
-
-    function toggleOptions() {
+    document.addEventListener('click', function(event) {
         var optionsDiv = document.getElementById("opzioni");
-        if (optionsDiv.style.display === "none") {
-            optionsDiv.style.display = "block";
-        } else {
-            optionsDiv.style.display = "none";
+        var targetElement = event.target;
+
+        // Controllo se il clic è avvenuto all'interno dell'elemento #opzioni
+        var isClickInsideOptions = optionsDiv.contains(targetElement);
+
+        // Se il clic è al di fuori di #opzioni e #opzioni è attiva, chiudo le opzioni
+        if (!isClickInsideOptions && optionsDiv.classList.contains("active")) {
+            optionsDiv.classList.remove("active");
         }
+    });
+
+    // Funzione per gestire il clic sull'opzione di toggle
+    function toggleOptions(event) {
+        event
+            .stopPropagation(); // Impedire la propagazione del clic per evitare che venga gestito dal document click listener
+        var optionsDiv = document.getElementById("opzioni");
+        optionsDiv.classList.toggle("active");
     }
 
 
@@ -447,7 +477,6 @@
     }
 
     function svuotaChat() {
-
 
         var elencoChat = document.getElementById("elenco-chat");
 
@@ -466,34 +495,34 @@
         }
 
         for (var i = 0; i < chatDaEliminare.length; i++) {
-    (function(i) { // Blocco funzione per catturare il valore corrente di i
-        $.ajax({
-            type: 'POST',
-            url: '/deleteChat',
-            data: {
-                chatId: chatDaEliminare[i],
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(data) {
-                // Rimuovi la chat dallo schermo
-                var chatDiv = document.getElementById(chatDaEliminare[i]);
-                if (chatDiv) {
-                    chatDiv.remove();
-                }
+            (function(i) { // Blocco funzione per catturare il valore corrente di i
+                $.ajax({
+                    type: 'POST',
+                    url: '/deleteChat',
+                    data: {
+                        chatId: chatDaEliminare[i],
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        // Rimuovi la chat dallo schermo
+                        var chatDiv = document.getElementById(chatDaEliminare[i]);
+                        if (chatDiv) {
+                            chatDiv.remove();
+                        }
 
-                // Rimuovi anche il contenitore dei messaggi della chat
-                var chatContainer = document.getElementById(chatDaEliminare[i] + '-container');
-                if (chatContainer) {
-                    chatContainer.remove();
-                }
+                        // Rimuovi anche il contenitore dei messaggi della chat
+                        var chatContainer = document.getElementById(chatDaEliminare[i] + '-container');
+                        if (chatContainer) {
+                            chatContainer.remove();
+                        }
 
-            },
-            error: function(error) {
-                console.error('Errore durante l\'aggiornamento del messaggio');
-            }
-        });
-    })(i); // Invocazione immediata del blocco funzione
-}
+                    },
+                    error: function(error) {
+                        console.error('Errore durante l\'aggiornamento del messaggio');
+                    }
+                });
+            })(i); // Invocazione immediata del blocco funzione
+        }
 
         document.getElementById('overlay2').style.display = 'none';
         creaNuovaChat("", "EliminaUnicaChat");
