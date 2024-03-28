@@ -13,6 +13,7 @@
 
     @extends('homeStyle')
     @extends('homeJs')
+
 </head>
 
 <body>
@@ -20,13 +21,16 @@
     <div class="container-fluid" id="containerPrincipale">
         <div class="row" id="rigaPrincipale">
             <div class="col-1" id="barra-sinistra">
-                <h2>Le Tue Chat</h2>
-                <button onclick="creaNuovaChat(false); cambiaChatAllaCreazione();" id="pulsanteNuovaChat" class="btn btn-success"
-                    style="margin: 0.5rem;">Crea Nuova Chat</button>
+                <div>
+                    <h2>Le Tue Chat</h2>
+                    <button onclick="creaNuovaChat(false); cambiaChatAllaCreazione();" id="pulsanteNuovaChat"
+                        class="btn btn-success" style="margin: 0.5rem;">Crea Nuova Chat</button>
+                </div>
                 <div id="elenco-chat"></div>
             </div>
 
-            <button id="freccia" class='fas fa-angle-left' style='font-size:36px' onclick="chiudiBarraSinistra()"></button>
+            <button id="freccia" class='fas fa-angle-left' style='font-size:36px'
+                onclick="chiudiBarraSinistra()"></button>
 
             <div class="col" id="barra-destra">
                 <div class="row" id="barra-sopra">
@@ -37,7 +41,8 @@
                     </div>
                     <div class="col" style="text-align: right;">
                         <div class="login-register">
-                        <span onclick="toggleOptions(event)" style="cursor: pointer; ">Opzioni <i class="fa-solid fa-gear"></i></span>
+                            <span onclick="toggleOptions(event)" style="cursor: pointer; ">Opzioni <i
+                                    class="fa-solid fa-gear"></i></span>
 
                             <div id="opzioni">
                                 @if (Auth::check())
@@ -59,23 +64,27 @@
                 </div>
                 <h2 id="-chat-header">Tipologia bot scelto es: matematica</h2>
 
-                <div class="row" >
+                <div class="row">
                     <div class="col-2">
                     </div>
                     <div class="col-8" id="chat-container">
+                        <div id="barra-invio">
+                            <div style="display: flex; align-items: flex-end;">
+                                <textarea type="text" id="messaggio-input"
+                                    placeholder="Scrivi il tuo messaggio..."></textarea>
+                                <button id="invia-bottone" onclick="inviaMessaggio()" style="padding: 1rem;">
+                                    &#9650;
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-2">
                     </div>
                 </div>
-                
-                <div class="row" id="barra-sotto">
-                    <div id="barra-invio">
-                        <textarea type="text" id="messaggio-input" placeholder="Scrivi il tuo messaggio..."></textarea>
-                        <button id="invia-bottone" onclick="inviaMessaggio()" style="padding: 1rem;">
-                            &#9650;
-                        </button>
-                    </div>
-                </div>
+
+
+
+
             </div>
         </div>
     </div>

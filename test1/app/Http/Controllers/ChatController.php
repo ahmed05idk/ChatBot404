@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Chat;
 use App\Models\Message;
+use Illuminate\Support\Facades\Log;
+
 
 
 class ChatController extends Controller
@@ -17,10 +19,12 @@ class ChatController extends Controller
 
     public function store(Request $request)
     {
+        
         $validatedData = $request->validate([
             'message' => 'required',
             'chatID' => 'required',
             'userCreationId' => 'required',
+            'nomeChat' => 'required',
         ]);
     
         // Cambia 'Chat' con il tuo modello dei messaggi (presumibilmente 'Message')
@@ -28,8 +32,10 @@ class ChatController extends Controller
             'message' => $validatedData['message'],
             'chatID' => $validatedData['chatID'], 
             'userCreationId' => $validatedData['userCreationId'], 
+            'nomeChat' => $validatedData['nomeChat'], 
         ]);
-    
+        
+
         return redirect('/')->with('success', 'Message is successfully saved');
     }
     

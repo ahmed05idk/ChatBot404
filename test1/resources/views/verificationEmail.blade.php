@@ -7,11 +7,11 @@
     <title>Verification Email</title>
     <style>
         .header {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: bold;
         }
         .content {
-            font-size: 16px;
+            font-size: 24px;
         }
     </style>
 </head>
@@ -19,7 +19,8 @@
     <div class="header">ChatBot404</div>
     <div class="content">
         <p>Il tuo codice di verifica è:</p>
-        <p>{{ $verificationCode }}</p>
+        <p style="font-size: 30px;">{{ $verificationCode }}</p>
     </div>
 </body>
+
 </html>

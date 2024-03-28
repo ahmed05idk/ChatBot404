@@ -8,16 +8,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    
+
 
     <style>
     form {
         text-align: center;
     }
 
-    body {
-        background-color: #f8f9fa;
+    #app {
+        background:
+            linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+            linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+            linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+            linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+            linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+            linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
+        background-color: #131313;
+        background-size: 20px 20px;
+
     }
+ 
 
     .container {
         display: flex;
@@ -26,6 +36,7 @@
         height: 96vh;
         padding: 20px;
     }
+
     .container-fluid {
         padding: 20px !important;
     }
@@ -81,30 +92,30 @@
         font-size: 30px;
         width: 40px;
     }
-    #wrongPassMail{
+
+    #wrongPassMail {
         color: red;
     }
-    
-#verificationBox {
 
-    justify-content: center;
+    #verificationBox {
 
-}
-.emailAndVer{
-    padding: 0 !important;
-}
-.row{
-    margin:0 !important;
-}   
+        justify-content: center;
 
-#changeLogReg{
+    }
+
+    .emailAndVer {
+        padding: 0 !important;
+    }
+
+    .row {
+        margin: 0 !important;
+    }
+
+    #changeLogReg {
         padding: 2px 0 5px 0;
         border-top: 1px solid black;
-       
-}
 
-
-
+    }
     </style>
 </head>
 

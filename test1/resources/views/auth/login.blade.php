@@ -17,7 +17,7 @@
 
         <div class="container-fluid">
 
-            <div class="row">
+            <div class="row" style="width: 50px;">
                 <a href="/" class="back-button" style="">
                     <i class="fa fa-arrow-left"></i>
                 </a>
@@ -67,9 +67,9 @@
                             {{ __('Login') }}
                         </button>
                     </div>
-                    <div class="row">
+                    <div class="row" style="justify-content: center;">
                         @if (Route::has('password.request'))
-                        <a class="btn btn-link" href="{{ route('password.request') }}">
+                        <a class="btn btn-link" href="{{ route('password.request') }}" style="width: 200px;">
                             {{ __('Forgot Your Password?') }}
                         </a>
                         @endif
@@ -82,7 +82,7 @@
         </div>
 
 
-        <div class="row" style="text-align: center;">
+        <div class="row" style="text-align: center; justify-content: center;">
             <a href="/register" class="btn-link" style="text-decoration: none; text-align: center;"
                 id="changeLogReg">Non hai un account?
                 registrati</a>

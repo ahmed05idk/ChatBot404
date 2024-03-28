@@ -14,7 +14,7 @@ class Message extends Model
     use HasApiTokens, HasFactory, Notifiable;
 
     use HasFactory;
-    protected $fillable = ['message', 'chatID', 'userCreationId'];
+    protected $fillable = ['message', 'chatID', 'userCreationId', 'nomeChat'];
     }
    
 

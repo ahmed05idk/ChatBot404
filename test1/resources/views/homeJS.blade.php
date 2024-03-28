@@ -47,7 +47,7 @@
                 this.style.height = this.scrollHeight + 'px';
                 this.style.overflowY = 'hidden';
             }
-        }
+        } 
     });
 
 
@@ -57,16 +57,8 @@
     function selectFirstChat() {
 
         if (checkUserRegistration()) {
-            var messaggi = <?php echo json_encode($messaggi); ?>;
 
-            if (messaggi.length == 0) {
-                initialChatID = 'chat_1';
-            } else {
-                var initialChatID = messaggi[0].ChatID;
-            }
-
-
-            cambiaChat(initialChatID);
+            cambiaChat(ultimaChatCreata);
             return;
         }
         cambiaChat('chat_1');
@@ -76,16 +68,17 @@
 
     function creaChatDaDB() {
         var messaggi = <?php echo json_encode($messaggi); ?>;
+
         if (messaggi.length == 0) {
             creaNuovaChat();
             return;
         }
-
         // Crea un array di ID di chat unici
         var chatIDs = [];
         messaggi.forEach(function(messaggio) {
             if (!chatIDs.includes(messaggio.ChatID)) {
                 chatIDs.push(messaggio.ChatID);
+                
             }
         });
 
@@ -93,10 +86,14 @@
         chatIDs.forEach(function(chatID) {
             creaNuovaChat(chatID);
         });
-
+        
         // Assegna i messaggi alle chat corrispondenti
         messaggi.forEach(function(messaggio) {
             document.getElementById(messaggio.ChatID + '-container').innerHTML = messaggio.message;
+        });
+        messaggi.forEach(function(messaggio) {
+
+            document.querySelector("#" + messaggio.ChatID + " div span").innerHTML = messaggio.nomeChat;
         });
 
     }
@@ -126,7 +123,7 @@
             nuovaChatDiv.id = chatID;
             nuovaChatDiv.classList.add('chat-item');
             nuovaChatDiv.innerHTML = '<div style="display: flex; justify-content: space-between;">' +
-                '<span>Nome chat generata ' + chatCounter + '</span>' +
+                '<span id="nomeChat">Nome chat generata ' + chatCounter + '</span>' +
                 '<button class="chatButton" onclick="eliminaChat(event, \'' + chatID +
                 '\')"><i class="fas fa-trash-alt"></i></button></div>';
             nuovaChatDiv.onclick = function() {
@@ -283,20 +280,23 @@
 
         var messaggio = inputMessaggio.value;
 
+
+        if (messaggio.length < 2000) {
+            messaggiPerChat = {};
+       
+
+
         messaggio = String(messaggio).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g,
             '&quot;');
-
-
 
 
         if (messaggio.trim() !== '') {
             var chatContainer = document.querySelector('.active-chat');
 
-            // Effettua una richiesta AJAX per salvare il messaggio nel database
 
 
             // Aggiungi il messaggio alla chat solo se il salvataggio nel database è riuscito
-            chatContainer.innerHTML += '<p>Tu: ' + messaggio + '</p>';
+            chatContainer.innerHTML += '<p>Tu:<br>' + messaggio + '</p>';
 
             // Pulisci il contenuto del textarea e reimposta la sua altezza
             inputMessaggio.value = '';
@@ -307,6 +307,26 @@
         if (!chatModificate.includes(chatContainer.id)) {
             chatModificate.push(chatContainer.id)
         }
+
+        rispostaIa(messaggio);
+    }else{
+        alert("Messaggio troppo lungo, massimo 2000 caratteri");
+    }
+    
+}
+
+    function rispostaIa(domanda) {
+
+        // chiamata all ia che prende la risposta
+        var risposta = "coglione"
+
+        var chatContainer = document.querySelector('.active-chat');
+
+ 
+        chatContainer.innerHTML += '<p>Bot:<br>' + risposta + '</p>';
+
+
+
     }
 
 
@@ -327,58 +347,60 @@
     };
 
     function salvaDatiSincronamente() {
-        var chatContainers = document.querySelectorAll('[id^="chat_"][id$="-container"]');
+    var chatContainers = document.querySelectorAll('[id^="chat_"][id$="-container"]');
 
-        // Itera attraverso i contenitori delle chat e salva il loro contenuto nel database
-        chatContainers.forEach(function(container) {
-            var chatID = container.id.replace('-container', ''); // Ottieni l'ID della chat
-            var messages = container.innerHTML; // Ottieni il contenuto del container
-            var idExist = false;
+    // Itera attraverso i contenitori delle chat e salva il loro contenuto nel database
+    chatContainers.forEach(function(container) {
+        var chatID = container.id.replace('-container', ''); // Ottieni l'ID della chat
+        var messages = container.innerHTML; // Ottieni il contenuto del container
+        var nomeChat = document.querySelector("#" + chatID + " div span").textContent;
+        var idExist = false;
 
-            // controllo per evitare dupicati di chat nel db
-            var messaggi = <?php echo json_encode($messaggi); ?>;
-            var chatIDs = [];
-            messaggi.forEach(function(messaggio) {
-                if (!chatIDs.includes(messaggio.ChatID)) {
-                    chatIDs.push(messaggio.ChatID);
-                }
-            });
-            chatIDs.forEach(function(chatIDdb) {
-                if (chatIDdb == chatID) {
-                    idExist = true
-                }
-
-            });
-
-            if (idExist) {
-                return;
-            }
-
-            // Ottieni l'ID dell'utente lato server usando PHP
-            var idUtente = <?php echo json_encode(Auth::check() ? Auth::user()->id : null); ?>;
-
-            // Invia una richiesta AJAX per salvare il contenuto nel database
-            if (messages) {
-                salvaChatNelDatabase(chatID, messages, idUtente)
-                    .then(function() {})
-                    .catch(function(error) {
-                        console.error('Errore nel salvataggio della chat:', error);
-                        if (error.response) {
-                            console.error('Dettagli dell\'errore:', error.response.data);
-                        }
-                    });
+        // controllo per evitare dupicati di chat nel db
+        var messaggi = <?php echo json_encode($messaggi); ?>;
+        var chatIDs = [];
+        messaggi.forEach(function(messaggio) {
+            if (!chatIDs.includes(messaggio.ChatID)) {
+                chatIDs.push(messaggio.ChatID);
             }
         });
-    }
+        chatIDs.forEach(function(chatIDdb) {
+            if (chatIDdb == chatID) {
+                idExist = true
+            }
 
-
-    function salvaChatNelDatabase(chatID, messages, idUtente) {
-        return axios.post('/messages', {
-            chatID: chatID,
-            message: messages,
-            userCreationId: idUtente
         });
-    }
+
+        if (idExist) {
+            return;
+        }
+
+        // Ottieni l'ID dell'utente lato server usando PHP
+        var idUtente = <?php echo json_encode(Auth::check() ? Auth::user()->id : null); ?>;
+
+        // Invia una richiesta AJAX per salvare il contenuto nel database
+        if (messages) {
+            salvaChatNelDatabase(chatID, messages, idUtente, nomeChat)
+                .then(function() {})
+                .catch(function(error) {
+                    console.error('Errore nel salvataggio della chat:', error);
+                    if (error.response) {
+                        console.error('Dettagli dell\'errore:', error.response.data);
+                    }
+                });
+        }
+    });
+}
+
+
+function salvaChatNelDatabase(chatID, messages, idUtente, nomeChat) {
+    return axios.post('/messages', {
+        chatID: chatID,
+        message: messages,
+        userCreationId: idUtente,
+        nomeChat: nomeChat
+    });
+}
 
     function checkUserRegistration() {
         @if(Auth::check())
@@ -414,11 +436,20 @@
         }
     }
 
+
+
+
     function chiudiBarraSinistra() {
         var barraSinistra = document.getElementById('barra-sinistra');
         var freccia = document.getElementById('freccia');
-        barraSinistra.classList.toggle('chiudi'); // Aggiungi o rimuovi la classe 'chiudi'
+        var barraInvio = document.getElementById('barra-invio');
+        barraSinistra.classList.toggle('chiusa'); // Aggiungi o rimuovi la classe 'chiudi'
         freccia.classList.toggle('chiusa'); // Aggiungi o rimuovi la classe 'chiusa' alla freccia
+        barraInvio.classList.toggle('chiusa');
+
+        barraSinistra.addEventListener('transitionend', function() {
+            $("#barra-invio").css("width", $("#chat-container").width()+43);
+        });
     }
 
 
@@ -426,23 +457,30 @@
         var larghezzaFinestra = window.innerWidth;
         var barraSinistra = document.getElementById('barra-sinistra');
         var freccia = document.getElementById('freccia');
+        var barraInvio = document.getElementById('barra-invio');
 
         if (larghezzaFinestra < 800) {
-            barraSinistra.classList.add('chiudi');
+            barraSinistra.classList.add('chiusa');
             freccia.classList.add('chiusa');
+            barraInvio.classList.add('chiusa');
         } else {
-            barraSinistra.classList.remove('chiudi');
+            barraSinistra.classList.remove('chiusa');
             freccia.classList.remove('chiusa');
-
-
+            barraInvio.classList.remove('chiusa');
         }
+
+        $("#barra-invio").css("width", $("#chat-container").width()+43);
+
     }
 
     // Aggiungi un ascoltatore di eventi per l'evento resize della finestra
     window.addEventListener('resize', controllaDimensioniFinestra);
 
     // Chiama la funzione all'inizio per controllare le dimensioni iniziali della finestra
-    controllaDimensioniFinestra();
+    $(document).ready(function() {
+        controllaDimensioniFinestra();
+    });
+
 
 
     document.addEventListener('click', function(event) {
@@ -528,6 +566,8 @@
         creaNuovaChat("", "EliminaUnicaChat");
         cambiaChat(ultimaChatCreata);
     }
+
+
 
 
     selectFirstChat();

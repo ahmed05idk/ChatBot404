@@ -6,8 +6,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <style>
+        
     #containerPrincipale,
     #rigaPrincipale,
     #barra-destra {
@@ -15,6 +16,22 @@
         padding: 0;
         max-width: 100%;
         margin: 0;
+        
+    }
+
+    #containerPrincipale,
+    #rigaPrincipale,
+    #barra-destra,
+    #contenitore-input{
+        background:
+            linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+            linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+            linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+            linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+            linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+            linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424) !important;
+        background-color: #131313 !important;
+        background-size: 20px 20px !important;
     }
 
     html,
@@ -24,6 +41,7 @@
         padding: 0;
         font-family: Arial, sans-serif;
         background-color: #f4f4f4;
+        color: white;
 
     }
 
@@ -36,6 +54,7 @@
         overflow-y: auto;
         height: 100vh;
         position: relative;
+
     }
 
 
@@ -53,22 +72,18 @@
     }
 
 
+
     #barra-invio {
-        display: flex;
-        position: sticky;
+       
+        position: fixed;
         bottom: 0;
-        width: 100%;
-        background-color: #fff;
-        padding: 20px;
+
         box-sizing: border-box;
         align-items: flex-end;
-        min-height: 9%;
-    }
-
-    #barra-sotto {
-        width: 99%;
-        position: absolute;
-        bottom: 0;
+        
+        justify-content: left;
+        background-color: rgba(255, 255, 255, 0);
+        
     }
 
 
@@ -91,6 +106,7 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         position: relative;
         z-index: 1000;
+        color: black;
     }
 
     .close-btn {
@@ -134,6 +150,7 @@
         z-index: 1;
         transition: left 0.5s ease;
         background: none;
+        color: gray;
     }
 
     #freccia.chiusa {
@@ -160,10 +177,10 @@
         padding: 20px;
         overflow-y: auto;
         transition: transform 0.5s ease, width 0.5s ease;
-        /* Aggiungi una transizione alla larghezza */
+        
     }
 
-    #barra-sinistra.chiudi {
+    #barra-sinistra.chiusa {
         transform: translateX(-300px);
         width: 0;
         padding: 0;
@@ -186,7 +203,8 @@
     #chat-container {
         flex: 1;
         word-wrap: break-word;
-        padding-top: 40px;
+        margin-top: 40px;
+        margin-bottom: 40px;
     }
 
     #messaggio-input {
@@ -206,9 +224,9 @@
         color: white;
         border: none;
         cursor: pointer;
-        margin-left: 10px;
+        margin-left: 0;
         border-radius: 5px;
-        height: 60px;
+        height: 70px;
     }
 
     .chatButton {
@@ -233,18 +251,9 @@
     }
 
 
-    html {
-        scrollbar-width: thin;
-        scrollbar-color: grey transparent;
-    }
 
 
-    html:hover {
-        scrollbar-width: thin;
-        scrollbar-color: transparent transparent;
-        transition: scrollbar-color 0.5s ease;
-    }
-
+   
 
 
     #opzioni {
@@ -262,10 +271,16 @@
     .opzione {
         border: 1px solid black;
         padding: 5px 10px;
+        color: black;
     }
 
     .opzione:hover {
         background-color: #2e8500;
+    }
+
+
+    p {
+        margin-bottom: 40px;
     }
     </style>
 </head>

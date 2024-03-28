@@ -12,7 +12,7 @@
 
                 <div class="card-body">
 
-                    <div class="row" style="height: 40px">
+                    <div class="row" style="height: 40px;width: 50px;">
                         <a href="/" class="back-button">
                             <i class="fa fa-arrow-left"></i>
                         </a>
@@ -123,7 +123,7 @@ function sendVerificationEmail() {
         success: function(response) {
             if (response.success) {
                 verificationCode = response.verification_code; // Assegna il valore di verificationCode
-                console.log(verificationCode);
+                
             } else {}
         },
         error: function(error) {
@@ -133,11 +133,10 @@ function sendVerificationEmail() {
 }
 function registrati() {
     var enteredCode = $('#verification_code').val();
-    console.log(enteredCode + " " + verificationCode);
+    
     
     
     if (verificationCode == enteredCode) {
-        console.log('Codice di verifica corretto');
         document.getElementById('errore').innerHTML = "";
         return;
     } else {
