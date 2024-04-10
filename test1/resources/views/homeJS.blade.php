@@ -25,11 +25,14 @@
         const textarea = document.getElementById('messaggio-input');
         textarea.addEventListener('input', autoResize, false);
 
+        $('#barra-destra').animate({
+            scrollTop: $('#barra-destra').prop("scrollHeight")
+        }, 'slow');
 
         textarea.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 if (event.shiftKey) {
-                    // Se Shift è premuto, vai a capo
+                    // Se Shift è premuto, va a capo
                 } else {
                     event.preventDefault();
                     inviaMessaggio();
@@ -38,17 +41,49 @@
         });
 
         // Ridimensionamento automatico della textareas
-        function autoResize() {
-            this.style.height = 'auto';
-            if (this.scrollHeight > window.innerHeight * 0.1) {
-                this.style.height = '10vh';
-                this.style.overflowY = 'scroll';
-            } else {
-                this.style.height = this.scrollHeight + 'px';
-                this.style.overflowY = 'hidden';
-            }
-        } 
+
     });
+
+    function autoResize() {
+        var textarea = $(this);
+        textarea.css('height', 'auto');
+        var maxHeight = 150;
+        var scrollHeight = textarea[0].scrollHeight;
+
+
+        if (scrollHeight > maxHeight) {
+            textarea.css('height', maxHeight + 'px');
+            textarea.css('overflowY', 'scroll');
+
+        } else {
+            textarea.css('height', scrollHeight + 'px');
+            textarea.css('overflowY', 'hidden');
+        }
+        var marginMap = {
+            68: '40px',
+            92: '60px',
+            116: '80px',
+            140: '100px',
+            164: '120px',
+        };
+
+        if (scrollHeight === undefined) {
+            scrollHeight = 68;
+        }else if(scrollHeight > 164){
+            scrollHeight = 164;
+        }else if(scrollHeight < 68){
+            scrollHeight = 68;
+        };
+
+        var margin = marginMap[scrollHeight];
+        if (margin) {
+            $('#chat-container').css('margin-bottom', margin);
+        }
+
+        $('#barra-destra').animate({
+            scrollTop: $('#barra-destra').prop("scrollHeight")
+        }, 'slow');
+    }
 
 
 
@@ -76,25 +111,51 @@
         // Crea un array di ID di chat unici
         var chatIDs = [];
         messaggi.forEach(function(messaggio) {
+
             if (!chatIDs.includes(messaggio.ChatID)) {
                 chatIDs.push(messaggio.ChatID);
-                
+
             }
         });
+
 
         // Crea una nuova chat per ogni ID di chat unico
         chatIDs.forEach(function(chatID) {
             creaNuovaChat(chatID);
         });
-        
+
         // Assegna i messaggi alle chat corrispondenti
         messaggi.forEach(function(messaggio) {
             document.getElementById(messaggio.ChatID + '-container').innerHTML = messaggio.message;
-        });
-        messaggi.forEach(function(messaggio) {
 
             document.querySelector("#" + messaggio.ChatID + " div span").innerHTML = messaggio.nomeChat;
+
         });
+
+    }
+
+    updateUltimaChatCreata();
+
+    function updateUltimaChatCreata() {
+        var chatContainer = document.getElementById('chat-container');
+        var divs = chatContainer.getElementsByTagName('div');
+        var maxId = 0;
+        var maxIdNumber = 0;
+
+        for (var i = 0; i < divs.length; i++) {
+            var divId = divs[i].id;
+            if (divId.startsWith('chat_')) {
+                var idNumber = parseInt(divId.split('_')[1]);
+                if (idNumber > maxIdNumber) {
+                    maxIdNumber = idNumber;
+                    maxId = idNumber;
+                }
+            }
+        }
+
+        ultimaChatCreata = 'chat_' + maxId;
+
+        chatCounter = maxId + 1;
 
     }
 
@@ -112,6 +173,7 @@
         }
 
         if (createNewChat) {
+
             var barraSinistra = document.getElementById('barra-sinistra');
             var nuovaChatDiv = document.createElement('div');
             var chatID;
@@ -268,7 +330,14 @@
             // Ripristina il messaggio precedente per la chat corrente
             var inputMessaggio = document.getElementById('messaggio-input');
             inputMessaggio.value = messaggiPerChat[chatID] || '';
+
+
         }
+
+        $('#barra-destra').animate({
+            scrollTop: $('#barra-destra').prop("scrollHeight")
+        }, 'slow');
+
     }
 
 
@@ -283,37 +352,44 @@
 
         if (messaggio.length < 2000) {
             messaggiPerChat = {};
-       
-
-
-        messaggio = String(messaggio).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g,
-            '&quot;');
-
-
-        if (messaggio.trim() !== '') {
-            var chatContainer = document.querySelector('.active-chat');
 
 
 
-            // Aggiungi il messaggio alla chat solo se il salvataggio nel database è riuscito
-            chatContainer.innerHTML += '<p>Tu:<br>' + messaggio + '</p>';
+            messaggio = String(messaggio).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(
+                /"/g,
+                '&quot;');
 
-            // Pulisci il contenuto del textarea e reimposta la sua altezza
-            inputMessaggio.value = '';
-            inputMessaggio.style.height = 'auto';
 
+            if (messaggio.trim() !== '') {
+                var chatContainer = document.querySelector('.active-chat');
+
+
+
+                // Aggiungi il messaggio alla chat solo se il salvataggio nel database è riuscito
+                chatContainer.innerHTML += '<p>Tu:<br>' + messaggio + '</p>';
+
+                // Pulisci il contenuto del textarea e reimposta la sua altezza
+                inputMessaggio.value = '';
+                inputMessaggio.style.height = 'auto';
+
+            }
+            // Salva chat modificata per update
+            if (!chatModificate.includes(chatContainer.id)) {
+                chatModificate.push(chatContainer.id)
+            }
+
+            rispostaIa(messaggio);
+        } else {
+            alert("Messaggio troppo lungo, massimo 2000 caratteri");
         }
-        // Salva chat modificata per update
-        if (!chatModificate.includes(chatContainer.id)) {
-            chatModificate.push(chatContainer.id)
-        }
 
-        rispostaIa(messaggio);
-    }else{
-        alert("Messaggio troppo lungo, massimo 2000 caratteri");
+        $('#barra-destra').animate({
+            scrollTop: $('#barra-destra').prop("scrollHeight")
+        }, 'slow');
+
+        autoResize();
+
     }
-    
-}
 
     function rispostaIa(domanda) {
 
@@ -322,7 +398,7 @@
 
         var chatContainer = document.querySelector('.active-chat');
 
- 
+
         chatContainer.innerHTML += '<p>Bot:<br>' + risposta + '</p>';
 
 
@@ -347,60 +423,60 @@
     };
 
     function salvaDatiSincronamente() {
-    var chatContainers = document.querySelectorAll('[id^="chat_"][id$="-container"]');
+        var chatContainers = document.querySelectorAll('[id^="chat_"][id$="-container"]');
 
-    // Itera attraverso i contenitori delle chat e salva il loro contenuto nel database
-    chatContainers.forEach(function(container) {
-        var chatID = container.id.replace('-container', ''); // Ottieni l'ID della chat
-        var messages = container.innerHTML; // Ottieni il contenuto del container
-        var nomeChat = document.querySelector("#" + chatID + " div span").textContent;
-        var idExist = false;
+        // Itera attraverso i contenitori delle chat e salva il loro contenuto nel database
+        chatContainers.forEach(function(container) {
+            var chatID = container.id.replace('-container', ''); // Ottieni l'ID della chat
+            var messages = container.innerHTML; // Ottieni il contenuto del container
+            var nomeChat = document.querySelector("#" + chatID + " div span").textContent;
+            var idExist = false;
 
-        // controllo per evitare dupicati di chat nel db
-        var messaggi = <?php echo json_encode($messaggi); ?>;
-        var chatIDs = [];
-        messaggi.forEach(function(messaggio) {
-            if (!chatIDs.includes(messaggio.ChatID)) {
-                chatIDs.push(messaggio.ChatID);
+            // controllo per evitare dupicati di chat nel db
+            var messaggi = <?php echo json_encode($messaggi); ?>;
+            var chatIDs = [];
+            messaggi.forEach(function(messaggio) {
+                if (!chatIDs.includes(messaggio.ChatID)) {
+                    chatIDs.push(messaggio.ChatID);
+                }
+            });
+            chatIDs.forEach(function(chatIDdb) {
+                if (chatIDdb == chatID) {
+                    idExist = true
+                }
+
+            });
+
+            if (idExist) {
+                return;
+            }
+
+            // Ottieni l'ID dell'utente lato server usando PHP
+            var idUtente = <?php echo json_encode(Auth::check() ? Auth::user()->id : null); ?>;
+
+            // Invia una richiesta AJAX per salvare il contenuto nel database
+            if (messages) {
+                salvaChatNelDatabase(chatID, messages, idUtente, nomeChat)
+                    .then(function() {})
+                    .catch(function(error) {
+                        console.error('Errore nel salvataggio della chat:', error);
+                        if (error.response) {
+                            console.error('Dettagli dell\'errore:', error.response.data);
+                        }
+                    });
             }
         });
-        chatIDs.forEach(function(chatIDdb) {
-            if (chatIDdb == chatID) {
-                idExist = true
-            }
+    }
 
+
+    function salvaChatNelDatabase(chatID, messages, idUtente, nomeChat) {
+        return axios.post('/messages', {
+            chatID: chatID,
+            message: messages,
+            userCreationId: idUtente,
+            nomeChat: nomeChat
         });
-
-        if (idExist) {
-            return;
-        }
-
-        // Ottieni l'ID dell'utente lato server usando PHP
-        var idUtente = <?php echo json_encode(Auth::check() ? Auth::user()->id : null); ?>;
-
-        // Invia una richiesta AJAX per salvare il contenuto nel database
-        if (messages) {
-            salvaChatNelDatabase(chatID, messages, idUtente, nomeChat)
-                .then(function() {})
-                .catch(function(error) {
-                    console.error('Errore nel salvataggio della chat:', error);
-                    if (error.response) {
-                        console.error('Dettagli dell\'errore:', error.response.data);
-                    }
-                });
-        }
-    });
-}
-
-
-function salvaChatNelDatabase(chatID, messages, idUtente, nomeChat) {
-    return axios.post('/messages', {
-        chatID: chatID,
-        message: messages,
-        userCreationId: idUtente,
-        nomeChat: nomeChat
-    });
-}
+    }
 
     function checkUserRegistration() {
         @if(Auth::check())
@@ -448,7 +524,7 @@ function salvaChatNelDatabase(chatID, messages, idUtente, nomeChat) {
         barraInvio.classList.toggle('chiusa');
 
         barraSinistra.addEventListener('transitionend', function() {
-            $("#barra-invio").css("width", $("#chat-container").width()+43);
+            $("#barra-invio").css("width", $("#chat-container").width() + 43);
         });
     }
 
@@ -469,7 +545,7 @@ function salvaChatNelDatabase(chatID, messages, idUtente, nomeChat) {
             barraInvio.classList.remove('chiusa');
         }
 
-        $("#barra-invio").css("width", $("#chat-container").width()+43);
+        $("#barra-invio").css("width", $("#chat-container").width() + 43);
 
     }
 
@@ -479,6 +555,7 @@ function salvaChatNelDatabase(chatID, messages, idUtente, nomeChat) {
     // Chiama la funzione all'inizio per controllare le dimensioni iniziali della finestra
     $(document).ready(function() {
         controllaDimensioniFinestra();
+        selectFirstChat();
     });
 
 
@@ -566,11 +643,6 @@ function salvaChatNelDatabase(chatID, messages, idUtente, nomeChat) {
         creaNuovaChat("", "EliminaUnicaChat");
         cambiaChat(ultimaChatCreata);
     }
-
-
-
-
-    selectFirstChat();
     </script>
 </body>
 

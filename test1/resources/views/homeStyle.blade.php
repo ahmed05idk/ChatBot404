@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
-        
     #containerPrincipale,
     #rigaPrincipale,
     #barra-destra {
@@ -16,13 +15,13 @@
         padding: 0;
         max-width: 100%;
         margin: 0;
-        
+
     }
 
     #containerPrincipale,
     #rigaPrincipale,
     #barra-destra,
-    #contenitore-input{
+    #contenitore-input {
         background:
             linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
             linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
@@ -74,16 +73,17 @@
 
 
     #barra-invio {
-       
+
         position: fixed;
         bottom: 0;
 
         box-sizing: border-box;
         align-items: flex-end;
-        
+
         justify-content: left;
         background-color: rgba(255, 255, 255, 0);
         
+
     }
 
 
@@ -97,6 +97,7 @@
         background: rgba(0, 0, 0, 0.7);
         align-items: center;
         justify-content: center;
+        z-index: 1000;
     }
 
     .popup {
@@ -158,26 +159,17 @@
         transform: translate(-0%, -50%) rotateY(180deg);
     }
 
-    #barra-sinistra {
-        width: 300px;
-        height: 100vh;
-        background-color: #333;
-        color: #fff;
-        padding: 20px;
-        overflow-y: auto;
-        transition: transform 0.5s ease;
-        text-align: center;
-    }
+
 
     #barra-sinistra {
         width: 300px;
         height: 100vh;
         background-color: #333;
         color: #fff;
-        padding: 20px;
+        padding: 0 20px 20px 20px;
         overflow-y: auto;
         transition: transform 0.5s ease, width 0.5s ease;
-        
+        text-align: center;
     }
 
     #barra-sinistra.chiusa {
@@ -194,6 +186,7 @@
         background-color: #2e8500;
         border-radius: 5px;
         margin: 0.5rem;
+        
     }
 
     .chat:not(.active-chat) {
@@ -205,6 +198,7 @@
         word-wrap: break-word;
         margin-top: 40px;
         margin-bottom: 40px;
+        transition: margin-bottom 0.3s ease;
     }
 
     #messaggio-input {
@@ -213,9 +207,9 @@
         box-sizing: border-box;
         border: 1px solid #ccc;
         border-radius: 5px;
-        resize: none;
+        resize: none;/*
         height: 88%;
-        max-height: 200px;
+        max-height: 200px;*/
         overflow-y: auto;
     }
 
@@ -235,6 +229,26 @@
         border: 10px;
     }
 
+
+    #boxTitleCreateChat {
+        padding-top: 20px;
+        position: sticky;
+        top: 0;
+        background-color: #333;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     /* Stile generale per tutte le barre di scorrimento */
 
     ::-webkit-scrollbar {
@@ -253,7 +267,7 @@
 
 
 
-   
+
 
 
     #opzioni {

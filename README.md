@@ -65,19 +65,26 @@ _token: '{{ csrf_token() }}' // Aggiungi questa linea per includere il token CSR
 traduzioni nel file validation.php alcune rerrate
 
 
-todo
 
+
+
+
+
+
+todo:
 
 
 testo che apppare quando bot risponde sctivi
-logo
-creare un bella mail che i arriva per il codice di verifica nel file verificationEmail in view
-mettere nelle opzioni che ti torna alla pagina scelta tipo chatbot
-sfondino a login e rigister
-input non è fisso in basso
-non si vede barra di scorrimento
 
-register non crea remember token
+logo
+
+mettere nelle opzioni che ti torna alla pagina scelta tipo chatbot
+
+
+barra di scorrimento imputTesto quando ci vai sopra con il cursore deve diventare il cursore e non quel robo
+
+
+bug strano se crei troppe chat e ricarichi non carica/salva tutte le chat nuove
 
 
 
