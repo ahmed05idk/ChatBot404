@@ -1,0 +1,22 @@
+aggiungere cartella php alle variabili di sistema
+aggiungere node alle variabili di sistema
+
+installare composer
+
+aprire xampp
+
+schiacciare su admin di mysqul alla porta 3306
+
+creare database chatBotData
+
+andare nella cartella da cmd
+cd "C:\Users\eindemini\OneDrive - edu.ti.ch\Desktop\Scuola\Terzo anno\Progetto\ChatBot404\test1"
+
+nel cmd fare
+php artisan serve
+
+
+una volta avviato andate alla pagina http://127.0.0.1:8000/
+
+schiacciare su generate app key nel riquadro a destra e ricaricare 
+

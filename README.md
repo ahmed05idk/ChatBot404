@@ -1,90 +1,45 @@
-# Non modificate roba pls che se no è un casino
-
-aggiungere cartella php alle variabili di sistema
-aggiungere node alle variabili di sistema
-
-installare composer
-
-aprire xampp
-
-schiacciare su admin di mysqul alla porta 3306
-
-creare database chatBotData
-
-andare nella cartella da cmd
-cd "C:\Users\eindemini\OneDrive - edu.ti.ch\Desktop\Scuola\Terzo anno\Progetto\ChatBot404\test1"
-
-nel cmd fare
-php artisan serve
 
 
-una volta avviato andate alla pagina http://127.0.0.1:8000/
+Lista file importanti/che ho usato:
 
-schiacciare su generate app key nel riquadro a destra e ricaricare 
-
-
-
-crea file login nella cartella auth
-php artisan make:view auth.login
+    test1\routes\web -> salvataggio nel db di chat e account utenti, per utenti utilizza i controller per salvare e validare
 
 
+    test1\app\Http\Controllers\Auth -> file per logn/register
 
-creare tabella per nuovo database senza ancora inserirla nel db
-php artisan make:migration messages
+    test1\app\Http\Controllers\Auth\VerificationController -> creazione numero casuale da usare nella verifica mail
+
+    test1\app\Http\Controllers\Auth\AuthController -> funzioni di validazione/salvataggio nel db delle credenziali dell account
+
+    test1\app\Http\Controllers\Auth\AuthControllerfunzioni di validazione/salvataggio nel db delle chat
 
 
-crea la tabella della migration nel db
-php artisan migrate
+    test1\resources\views\home -> parte html della home del sito
+
+    test1\resources\views\homeJs -> parte js della home del sito
+
+    test1\resources\views\homeStyle -> parte css della home del sito
+
+    test1\resources\views\verificationeEmail -> template della mail che viene inviata quando ti registri
 
 
-Per agginta campi a tabella:
+    test1\app\Models\Message -> campi richiesti per il salvataggio nel db della chat
 
-crei migrazione
-php artisan make:migration add_nomeCampo_to_nomeTabella_table
+    test1\app\Models\user -> campi richiesti per il salvataggio nel db del utente
 
-andare nel file appena creato database\migration\nomefile
 
-sostituire la funzione up con
+    test1\database\migrations -> quando devo fare update o aggiungere campi del db creo una migration qua
 
-    public function up()
-    {
-        Schema::table('messages', function (Blueprint $table) { // al posto di message mettere nome tabella
-            $table->text('ChatID'); // Cambia il tipo di dato in base alle tue esigenze o il nome campo
-        });
-    }
-    
-e poi fare 
-php artisan migrate
+
+    test1\.env -> variabili che utiliza il progetto come ad esempio la connessione al db o la mail per mandare l'email d verifica
+
+
+
 
 
 
 _token: '{{ csrf_token() }}' // Aggiungi questa linea per includere il token CSRF da errore se non lo metti in una chiamata Ajax
 
-
-
-traduzioni nel file validation.php alcune rerrate
-
-
-
-
-
-
-
-
-todo:
-
-
-testo che apppare quando bot risponde sctivi
-
-logo
-
-mettere nelle opzioni che ti torna alla pagina scelta tipo chatbot
-
-
-barra di scorrimento imputTesto quando ci vai sopra con il cursore deve diventare il cursore e non quel robo
-
-
-bug strano se crei troppe chat e ricarichi non carica/salva tutte le chat nuove
 
 
 
