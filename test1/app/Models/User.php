@@ -12,7 +12,11 @@ use Illuminate\Auth\MustVerifyEmail;
 
 
 
-
+/**
+ * Questa classe gestisce le operazioni relative all'utente.
+ * 
+ * @author Ethan
+ */
 class User extends Authenticatable implements MustVerifyEmailContract
 {
     use HasApiTokens, HasFactory, Notifiable, MustVerifyEmail;

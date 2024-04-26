@@ -88,9 +88,9 @@
                     </form>
                 </div>
                 <div class="row" style="text-align: center;  padding-top:10px">
-            <a href="/register" class="btn-link" style="text-decoration: none; text-align: center;"
-                id="changeLogReg">Hai già un account? Accedi</a>
-        </div>
+                    <a href="/register" class="btn-link" style="text-decoration: none; text-align: center;"
+                        id="changeLogReg">Hai già un account? Accedi</a>
+                </div>
             </div>
         </div>
     </div>
@@ -98,6 +98,14 @@
 <script>
 var verificationCode; // Dichiarazione globale
 
+
+/**
+ * Metodo per inviare l'email di verifica
+ * 
+ * @returns void in caso la mail non sia valida
+ *
+ * @author Ethan
+ */
 function sendVerificationEmail() {
     var email = $('#email').val();
 
@@ -123,7 +131,7 @@ function sendVerificationEmail() {
         success: function(response) {
             if (response.success) {
                 verificationCode = response.verification_code; // Assegna il valore di verificationCode
-                
+
             } else {}
         },
         error: function(error) {
@@ -131,22 +139,30 @@ function sendVerificationEmail() {
         }
     });
 }
+
+
+/**
+ * Metodo che controlla se il codice iserito è uguale a quello generato se no bloccca l'evento principale
+ * 
+ * @returns void in caso il codice sia corretto
+ *
+ * @author Ethan
+ */
 function registrati() {
     var enteredCode = $('#verification_code').val();
-    
-    
-    
+
+
+
     if (verificationCode == enteredCode) {
         document.getElementById('errore').innerHTML = "";
         return;
     } else {
         document.getElementById('successo').innerHTML = "";
-        document.getElementById('errore').innerHTML = "<i class='fas fa-exclamation-triangle'></i> " + " Codice di verifica errato!";
+        document.getElementById('errore').innerHTML = "<i class='fas fa-exclamation-triangle'></i> " +
+            " Codice di verifica errato!";
         event.preventDefault();
     }
 }
-
-
 </script>
 
 @endsection

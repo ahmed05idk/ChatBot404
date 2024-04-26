@@ -5,8 +5,21 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Controller per la gestione della verifica dell'email
+ * 
+ * @author Ethan
+ */
 class VerificationController extends Controller
 {
+
+    /**
+     * Invia un'email di verifica all'utente con il codice di verifica
+     * 
+     * @param string $email - L'indirizzo email inderiti dell'utente
+     * 
+     * @return verificationCode - Il codice di verifica generato
+     */
     public function sendVerificationEmail($email)
     {
         // Genera un codice di verifica casuale

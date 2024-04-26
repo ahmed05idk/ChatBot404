@@ -7,10 +7,24 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+
+/**
+ * Controller per gestire le operazioni di autenticazione utente come registrazione, login e logout.
+ * 
+ * @author Ethan
+ */
 class AuthController extends Controller
 {
 
-
+    /**
+     * Registra un nuovo utente.
+     * 
+     * @param request La richiesta HTTP contenente i dati di registrazione dell'utente.
+     * 
+     * @return Reindirizza alla pagina home dopo la registrazione.
+     * 
+     * @author Ethan
+     */
     public function register(Request $request)
     {
         // Validazione dei dati del modulo
@@ -31,9 +45,17 @@ class AuthController extends Controller
         Auth::login($user);
 
         // Reindirizzamento dopo la registrazione
-        return redirect('/'); // Puoi personalizzare il percorso a tuo piacimento
+        return redirect('/');
     }
 
+
+        /**
+     * Mostra il modulo di registrazione.
+     * 
+     * @return Vista del modulo di registrazione.
+     * 
+     * @author Ethan
+     */
     public function showRegistrationForm()
     {
         return view('auth.register');
@@ -43,16 +65,40 @@ class AuthController extends Controller
 
     protected $redirectTo = '/';
 
+
+        /**
+     * Costruttore del controller.
+     * 
+     * Imposta il middleware per permettere solo agli ospiti di accedere, tranne per l'azione di logout.
+     */
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
     }
 
+
+        /**
+     * Mostra il modulo di accesso.
+     * 
+     * @return Vista del modulo di accesso.
+     * 
+     * @author Ethan
+     */
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
+
+        /**
+     * Esegue il logout dell'utente autenticato.
+     * 
+     * @param request La richiesta HTTP.
+     * 
+     * @return Reindirizza l'utente alla pagina di login con un messaggio di successo.
+     * 
+     * @author Ethan
+     */
     public function logout(Request $request)
     {
         // Effettua il logout dell'utente autenticato

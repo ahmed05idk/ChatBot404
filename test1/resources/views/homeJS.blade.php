@@ -20,7 +20,15 @@
     var chatModificate = [];
     var ultimaChatCreata = "chat_1";
 
+    var messaggiPerChat = {};
 
+    /**
+     * Questo metodo viene eseguito quando il contenuto della finestra viene caricato e serve a far si che se mentre scrivi in messaggio-input il testo vada a capo se si sta premendo shift
+     *
+     * @param event - L'evento di caricamento della finestra.
+     * 
+     * @author Ethan
+     */
     window.addEventListener('DOMContentLoaded', (event) => {
         const textarea = document.getElementById('messaggio-input');
         textarea.addEventListener('input', autoResize, false);
@@ -32,18 +40,22 @@
         textarea.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
                 if (event.shiftKey) {
-                    // Se Shift è premuto, va a capo
+                    // se shift è premuto va a capo
                 } else {
                     event.preventDefault();
                     inviaMessaggio();
                 }
             }
         });
-
-        // Ridimensionamento automatico della textareas
-
     });
 
+
+
+    /**
+     * Questo metodo serve a far ingrandire il campo di input messaggio-input quando il testo va a capo e a spostare il testo di chat-container più in alto
+     *
+     * @author Ethan
+     */
     function autoResize() {
         var textarea = $(this);
         textarea.css('height', 'auto');
@@ -69,9 +81,9 @@
 
         if (scrollHeight === undefined) {
             scrollHeight = 68;
-        }else if(scrollHeight > 164){
+        } else if (scrollHeight > 164) {
             scrollHeight = 164;
-        }else if(scrollHeight < 68){
+        } else if (scrollHeight < 68) {
             scrollHeight = 68;
         };
 
@@ -88,7 +100,11 @@
 
 
 
-
+    /**
+     * Questo metodo serve a selezionare l'ulltima chat creata o in caso la persona non abbia un account seleziona la chat di base (chat_1)
+     *
+     * @author Ethan
+     */
     function selectFirstChat() {
 
         if (checkUserRegistration()) {
@@ -99,19 +115,28 @@
         cambiaChat('chat_1');
     };
 
-    creaChatDaDB();
 
+    /**
+     * Questo metodo va a creare le chat dal database se l'utente ha un account inserendo anche i messaggi e il nome della chat
+     *
+     * Il metodo viene runnato solo quando si carica il sito
+     * 
+     * @author Ethan
+     */
     function creaChatDaDB() {
+        if (!checkUserRegistration()) {
+            creaNuovaChat();
+            return;
+        }
         var messaggi = <?php echo json_encode($messaggi); ?>;
 
         if (messaggi.length == 0) {
             creaNuovaChat();
             return;
         }
-        // Crea un array di ID di chat unici
+
         var chatIDs = [];
         messaggi.forEach(function(messaggio) {
-
             if (!chatIDs.includes(messaggio.ChatID)) {
                 chatIDs.push(messaggio.ChatID);
 
@@ -119,23 +144,33 @@
         });
 
 
-        // Crea una nuova chat per ogni ID di chat unico
+        // crea una chat pper ogni chatID
         chatIDs.forEach(function(chatID) {
             creaNuovaChat(chatID);
         });
 
-        // Assegna i messaggi alle chat corrispondenti
+        // popopla le chat con i messaggi e il nome
         messaggi.forEach(function(messaggio) {
             document.getElementById(messaggio.ChatID + '-container').innerHTML = messaggio.message;
 
             document.querySelector("#" + messaggio.ChatID + " div span").innerHTML = messaggio.nomeChat;
 
         });
+        putOnTop(0, true)
 
     }
+    creaChatDaDB();
 
-    updateUltimaChatCreata();
 
+
+
+    /**
+     * Questo metodo cambia il valore di ultimaChatCreata e chatCounter in base alle chat che vengono create dal db
+     *
+     * Il metodo viene runnato solo quando si carica il sito
+     * 
+     * @author Ethan
+     */
     function updateUltimaChatCreata() {
         var chatContainer = document.getElementById('chat-container');
         var divs = chatContainer.getElementsByTagName('div');
@@ -158,8 +193,20 @@
         chatCounter = maxId + 1;
 
     }
+    updateUltimaChatCreata();
 
 
+    /**
+     * Questo metodo serve a creare una nuova chat quando si schiaccia sul pulsante crea nuova chat o se si elimina l'unica chat esistente. 
+     * In caso si cerchi di ceare una nuova chat ma l'ultima creata non ha del contenuto non lo permette
+     * 
+     * 
+     * @param chatIDPassato - se bisogna creare un metodo con un id specifico
+     * 
+     * @param daEliminare - variabile che serve a creare comunque una chat quando l'unica chat esistente viene eliminata anche se la chat è vuota, se no createNewChat sarebbe false
+     * 
+     * @author Ethan
+     */
     function creaNuovaChat(chatIDPassato, daEliminare) {
         var createNewChat = true;
 
@@ -212,17 +259,35 @@
     }
 
 
-
+    /**
+     * Questo metodo viene chiamato solo al click sul pulsante "crea nuova chat" e serve a selezionare la chat che viene creata
+     * 
+     * @author Ethan
+     */
     function cambiaChatAllaCreazione() {
         var chatID = 'chat_' + (chatCounter - 1);
         cambiaChat(chatID);
     }
 
-    function chatPiuGrande() {
+
+    /**
+     * Questo metodo serve a tenere la chat selezionata quando ne elimini un altra o a selezionaare la prima chat se elimini la chat in cui sei in quel momento
+     * 
+     * @param chatID - id della chat che si vuole eliminare
+     * 
+     * @author Ethan
+     */
+    function chatPiuGrande(chatID) {
         var chatContainer = document.getElementById('chat-container');
         var divs = chatContainer.getElementsByTagName('div');
         var maxId = 0;
         var maxIdNumber = 0;
+
+        var activeChatId = $('.active-chat').attr('id');
+
+        if (activeChatId != chatID && activeChatId != null) {
+            return activeChatId.replace(/-container/g, '');
+        }
 
         for (var i = 0; i < divs.length; i++) {
             var divId = divs[i].id;
@@ -238,8 +303,18 @@
     }
 
 
+    /**
+     * Questo metodo fa comparire un popup per chiedere conferma se si vuole eliminare una chat e se si conferma la elimina sia a vista che dal db
+     * 
+     * @param event - evento che viene stoppato per evitare che venga selezionata la chat in cui si clicca il tasto del cestino
+     * 
+     * @param chatID - id della chat che si vuole eliminare
+     * 
+     * @exception errore se la chiamata ajax non va a buon fine
+     * 
+     * @author Ethan
+     */
     function eliminaChat(event, chatID) {
-        // Impedisci la propagazione dell'evento al pulsante principale
         if (event) {
             event.stopPropagation();
         }
@@ -271,46 +346,46 @@
                 },
 
                 success: function(data) {
-                    // Rimuovi la chat dallo schermo
+                    // Rimuove la chat dallo schermo
                     var chatDiv = document.getElementById(chatID);
                     if (chatDiv) {
                         chatDiv.remove();
                     }
 
-                    // Rimuovi anche il contenitore dei messaggi della chat
+                    // Rimuove il contenitore dei messaggi della chat
                     var chatContainer = document.getElementById(chatID + '-container');
                     if (chatContainer) {
                         chatContainer.remove();
                     }
                     document.getElementById('overlay').style.display = 'none';
 
-                    // Rimuovi l'event listener dopo l'esecuzione
                     confermaBtn.removeEventListener('click', confermaClick);
 
-                    cambiaChat(chatPiuGrande());
+                    cambiaChat(chatPiuGrande(chatID + '-container'));
 
                 },
-                error: function(error) {
-                    console.error('Errore durante l\'aggiornamento del messaggio');
-                }
+                error: function(error) {}
             });
-            //}
         });
 
         annullaBtn.addEventListener('click', function annullaClick() {
-            // Nascondi il popup senza eliminare la chat
+            // Nasconde il popup senza eliminare la chat
             document.getElementById('overlay').style.display = 'none';
 
-            // Rimuovi l'event listener dopo l'esecuzione
             annullaBtn.removeEventListener('click', annullaClick);
         });
     }
 
 
 
-    // Funzione per cambiare la chat attiva
-    var messaggiPerChat = {};
 
+    /**
+     * Questo metodo serve a cambiare la chat in base al chatID passato
+     * 
+     * @param chatID - id della chat selezionata
+     * 
+     * @author Ethan
+     */
     function cambiaChat(chatID) {
         var element = document.getElementById(chatID);
         if (element) {
@@ -324,14 +399,9 @@
             var chatContainer = document.getElementById(chatID + '-container');
             chatContainer.classList.add('active-chat');
 
-            // Aggiorna l'intestazione con il nome della chat corrente
-            //document.getElementById('tua-chat-header').textContent = document.getElementById(chatID).textContent;
-
-            // Ripristina il messaggio precedente per la chat corrente
+            // Inserisce i messaggi della nuova chat attiva
             var inputMessaggio = document.getElementById('messaggio-input');
             inputMessaggio.value = messaggiPerChat[chatID] || '';
-
-
         }
 
         $('#barra-destra').animate({
@@ -342,18 +412,25 @@
 
 
 
+    /**
+     * Questo metodo serve a inviare il messaggio e a far rispondere l'ia, se il messaggio ha più di 2000 caratteri non lo invia 
+     * 
+     * @exception errore se il messaggio è troppo lungo
+     * 
+     * @author Ethan
+     */
     function inviaMessaggio() {
 
         var inputMessaggio = document.getElementById('messaggio-input');
 
-
         var messaggio = inputMessaggio.value;
 
+        if (!messaggio) {
+            return;
+        }
 
         if (messaggio.length < 2000) {
             messaggiPerChat = {};
-
-
 
             messaggio = String(messaggio).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(
                 /"/g,
@@ -363,12 +440,9 @@
             if (messaggio.trim() !== '') {
                 var chatContainer = document.querySelector('.active-chat');
 
-
-
-                // Aggiungi il messaggio alla chat solo se il salvataggio nel database è riuscito
+                // Aggiunge il messaggio alla chat
                 chatContainer.innerHTML += '<p>Tu:<br>' + messaggio + '</p>';
 
-                // Pulisci il contenuto del textarea e reimposta la sua altezza
                 inputMessaggio.value = '';
                 inputMessaggio.style.height = 'auto';
 
@@ -389,23 +463,37 @@
 
         autoResize();
 
+        putOnTop(chatContainer.id.replace('-container', ''), false)
+
     }
 
+
+
+    /**
+     * Questo metodo serve a far rispondere l'ia in base al messaggio che gli viene passato
+     * 
+     * @param domanda - messaggio che l'utente ha scritto
+     * 
+     * @author Ethan
+     */
     function rispostaIa(domanda) {
 
-        // chiamata all ia che prende la risposta
-        var risposta = "coglione"
+        // chiamata all'ia che prende la risposta
+        var risposta = "ciao"
 
         var chatContainer = document.querySelector('.active-chat');
 
 
         chatContainer.innerHTML += '<p>Bot:<br>' + risposta + '</p>';
 
-
-
     }
 
 
+    /**
+     * Questo metodo serve a salvare i dati in modo sincrono quando si chiude la pagina così da non dover fare query multiple
+     * 
+     * @author Ethan
+     */
     window.onbeforeunload = function() {
 
         var isUserRegistered = checkUserRegistration();
@@ -422,13 +510,19 @@
 
     };
 
+
+    /**
+     * Questo metodo salva i dati in modo sincrono nel database se l'utente è registrato
+     * 
+     * @author Ethan
+     */
     function salvaDatiSincronamente() {
         var chatContainers = document.querySelectorAll('[id^="chat_"][id$="-container"]');
 
-        // Itera attraverso i contenitori delle chat e salva il loro contenuto nel database
+        // cicla i contenitori delle chat e salva il loro contenuto nel database
         chatContainers.forEach(function(container) {
-            var chatID = container.id.replace('-container', ''); // Ottieni l'ID della chat
-            var messages = container.innerHTML; // Ottieni il contenuto del container
+            var chatID = container.id.replace('-container', '');
+            var messages = container.innerHTML;
             var nomeChat = document.querySelector("#" + chatID + " div span").textContent;
             var idExist = false;
 
@@ -451,24 +545,38 @@
                 return;
             }
 
-            // Ottieni l'ID dell'utente lato server usando PHP
             var idUtente = <?php echo json_encode(Auth::check() ? Auth::user()->id : null); ?>;
 
-            // Invia una richiesta AJAX per salvare il contenuto nel database
             if (messages) {
                 salvaChatNelDatabase(chatID, messages, idUtente, nomeChat)
                     .then(function() {})
                     .catch(function(error) {
-                        console.error('Errore nel salvataggio della chat:', error);
-                        if (error.response) {
-                            console.error('Dettagli dell\'errore:', error.response.data);
-                        }
+                        if (error.response) {}
                     });
             }
         });
     }
 
 
+
+
+    /**
+     * Questo metodo serve a salvare i messaggi nel database trammite una chiamata ajax
+     * 
+     * @param chatID - id della chat
+     * 
+     * @param messages - messaggi della chat
+     * 
+     * @param idUtente - id dell'utente
+     * 
+     * @param nomeChat - nome della chat
+     * 
+     * @exception errore se la chiamata ajax non va a buon fine
+     * 
+     * @return - ritorna la chiamata ajax
+     * 
+     * @author Ethan
+     */
     function salvaChatNelDatabase(chatID, messages, idUtente, nomeChat) {
         return axios.post('/messages', {
             chatID: chatID,
@@ -478,6 +586,15 @@
         });
     }
 
+
+
+    /**
+     * Questo metodo serve a controllare se l'utente è registrato
+     * 
+     * @return - ritorna true se l'utente è registrato, false se non lo è
+     * 
+     * @author Ethan
+     */
     function checkUserRegistration() {
         @if(Auth::check())
         return true
@@ -486,11 +603,21 @@
         @endif
     }
 
+
+
+    /**
+     * Qesto metodo serve ad aggiornare tutti i messaggi nel db di tutte le chat che sono state modificate
+     * 
+     * @exception errore se la chiamata ajax non va a buon fine
+     * 
+     * @author Ethan
+     */
     function updateChat() {
         for (var i = 0; i < chatModificate.length; i++) {
             var chatContainer = document.getElementById(chatModificate[i]);
             var newMessage = chatContainer.innerHTML;
             var chatId = chatContainer.id.replace('-container', '');
+            var formattedDateTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
             $.ajax({
                 type: 'POST',
@@ -498,15 +625,11 @@
                 data: {
                     newMessage: newMessage,
                     chatId: chatId,
+
                     _token: '{{ csrf_token() }}'
                 },
-                success: function(data) {
-                    // Puoi gestire la risposta qui se necessario
-                    console.log('Messaggio aggiornato con successo');
-                },
-                error: function(error) {
-                    console.error('Errore durante l\'aggiornamento del messaggio');
-                }
+                success: function(data) {},
+                error: function(error) {}
             });
 
         }
@@ -514,21 +637,40 @@
 
 
 
-
+    /**
+     * Questo metodo serve a chiudere la barra sinistra quando si clicca sulla freccia
+     * 
+     * @author Ethan
+     */
     function chiudiBarraSinistra() {
         var barraSinistra = document.getElementById('barra-sinistra');
         var freccia = document.getElementById('freccia');
         var barraInvio = document.getElementById('barra-invio');
-        barraSinistra.classList.toggle('chiusa'); // Aggiungi o rimuovi la classe 'chiudi'
-        freccia.classList.toggle('chiusa'); // Aggiungi o rimuovi la classe 'chiusa' alla freccia
+        barraSinistra.classList.toggle('chiusa');
+        freccia.classList.toggle('chiusa');
         barraInvio.classList.toggle('chiusa');
 
-        barraSinistra.addEventListener('transitionend', function() {
-            $("#barra-invio").css("width", $("#chat-container").width() + 43);
-        });
+
+        requestAnimationFrame(aggiornaLarghezzaBarraInvio);
     }
 
 
+    /**
+     * Metodo per aggiornare dinamicamente la larghezza di #barra-invio per adattarsi alla larghezza corrente del contenitore #chat-container.
+     * 
+     * @autor Ethan
+     */
+    function aggiornaLarghezzaBarraInvio() {
+        $("#barra-invio").css("width", $("#chat-container").width() + 43);
+        requestAnimationFrame(aggiornaLarghezzaBarraInvio);
+    }
+
+
+    /**
+     * Questo metodo serve a controllare le dimensioni della finestra e a chiudere la barra sinistra se la finestra è troppo piccola
+     * 
+     * @author Ethan
+     */
     function controllaDimensioniFinestra() {
         var larghezzaFinestra = window.innerWidth;
         var barraSinistra = document.getElementById('barra-sinistra');
@@ -549,10 +691,9 @@
 
     }
 
-    // Aggiungi un ascoltatore di eventi per l'evento resize della finestra
+    // ascoltatore di eventi per il resize della finestra
     window.addEventListener('resize', controllaDimensioniFinestra);
 
-    // Chiama la funzione all'inizio per controllare le dimensioni iniziali della finestra
     $(document).ready(function() {
         controllaDimensioniFinestra();
         selectFirstChat();
@@ -560,57 +701,85 @@
 
 
 
+    /**
+     * Qesto metodo serve a fare comparire il box delle opzioni se si clicca sul pulsante opzioni
+     * 
+     * @author Ethan
+     */
     document.addEventListener('click', function(event) {
         var optionsDiv = document.getElementById("opzioni");
         var targetElement = event.target;
 
-        // Controllo se il clic è avvenuto all'interno dell'elemento #opzioni
+        // Controlla se si ha cliccato all'interno di opzioni
         var isClickInsideOptions = optionsDiv.contains(targetElement);
 
-        // Se il clic è al di fuori di #opzioni e #opzioni è attiva, chiudo le opzioni
+        // Se si clicca fuori da opzioni, chiudere il menu
         if (!isClickInsideOptions && optionsDiv.classList.contains("active")) {
             optionsDiv.classList.remove("active");
         }
     });
 
-    // Funzione per gestire il clic sull'opzione di toggle
+
+
+    /**
+     * Queto metodo serve a far comparire/togliere il box delle opzioni
+     * 
+     * @author Ethan
+     */
     function toggleOptions(event) {
         event
-            .stopPropagation(); // Impedire la propagazione del clic per evitare che venga gestito dal document click listener
+            .stopPropagation();
         var optionsDiv = document.getElementById("opzioni");
         optionsDiv.classList.toggle("active");
     }
 
 
+    /**
+     * Questo metodo serve a far comparire il popup per chiedere conferma se si vuole eliminare tutte le chat
+     * 
+     * @author Ethan
+     */
     function mostraPopupSvuotaChat() {
         document.getElementById('overlay2').style.display = 'flex';
 
     }
 
+
+    /**
+     * Questo metodo serve a chiudere il popup che chiede se si vuole eliminare tutte le chat
+     * 
+     * @author Ethan
+     */
     function chiudiPopup2() {
         document.getElementById('overlay2').style.display = 'none';
     }
 
+
+    /**
+     * Questo metodo serve a far apparire un popup per chiedere conferma se si vuole eliminare tutte le chat e fa comparire una chat vuota
+     * 
+     * @exception errore se la chiamata ajax non va a buon fine
+     * 
+     * @author Ethan
+     */
     function svuotaChat() {
 
         var elencoChat = document.getElementById("elenco-chat");
 
-        // Inizializza un array per salvare gli ID dei figli
         var chatDaEliminare = [];
 
-        // Se l'elemento genitore esiste
         if (elencoChat) {
-            // Seleziona tutti i figli che hanno un id che inizia con "chat_"
+            // seleziona tutti gli elementi figli che hanno un ID che inizia con "chat_"
             var figli = elencoChat.querySelectorAll("[id^='chat_']");
 
-            // Itera attraverso tutti i figli e salva i loro ID nell'array
+            // cicla le chat e ne salva gli ID
             figli.forEach(function(figlio) {
                 chatDaEliminare.push(figlio.id);
             });
         }
 
         for (var i = 0; i < chatDaEliminare.length; i++) {
-            (function(i) { // Blocco funzione per catturare il valore corrente di i
+            (function(i) {
                 $.ajax({
                     type: 'POST',
                     url: '/deleteChat',
@@ -619,29 +788,73 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(data) {
-                        // Rimuovi la chat dallo schermo
+                        // Rimuove la chat dallo schermo
                         var chatDiv = document.getElementById(chatDaEliminare[i]);
                         if (chatDiv) {
                             chatDiv.remove();
                         }
 
-                        // Rimuovi anche il contenitore dei messaggi della chat
+                        // rimuove il contenitore dei messaggi della chat
                         var chatContainer = document.getElementById(chatDaEliminare[i] + '-container');
                         if (chatContainer) {
                             chatContainer.remove();
                         }
 
                     },
-                    error: function(error) {
-                        console.error('Errore durante l\'aggiornamento del messaggio');
-                    }
+                    error: function(error) {}
                 });
-            })(i); // Invocazione immediata del blocco funzione
+            })(i);
         }
 
         document.getElementById('overlay2').style.display = 'none';
         creaNuovaChat("", "EliminaUnicaChat");
         cambiaChat(ultimaChatCreata);
+    }
+
+
+    /**
+     * Questo metodo serve a spostare in cima la chat in qui si ha scritto o a ordinare le chat in base all'ultima data di modifica
+     * 
+     * @param idChat - id della chat da spostare in cima se non è da db
+     * 
+     * @param fromDb - se si vuole fare un ordinamento delle chat del db in base all'ultima modifica
+     * 
+     * @author Ethan
+     */
+    function putOnTop(idChat, fromDb) {
+        if (!fromDb) {
+            var chatDaSpostare = $('#' + idChat);
+
+            chatDaSpostare.detach();
+
+            $('#elenco-chat').prepend(chatDaSpostare);
+        } else {
+            var messaggi = <?php echo json_encode($messaggi); ?>;
+
+
+            /**
+             * Il metodo ordina le date di messaggi in base alla data di aggiornamento, confrontando le date di aggiornamento.
+             *
+             * @param a Primo elemento da confrontare.
+             * 
+             * @param b Secondo elemento da confrontare.
+             * 
+             * @return Un valore negativo se a.updated_at è successivo a b.updated_at, zero se sono uguali o altrimenti un valore positivo.
+             * 
+             * @author Ethan
+             */
+            messaggi.sort(function(a, b) {
+                return new Date(b.updated_at) - new Date(a.updated_at);
+            });
+
+
+            for (var i = messaggi.length - 1; i >= 0; i--) {
+                var chatDaSpostare = $('#' + messaggi[i].ChatID);
+                $('#elenco-chat').prepend(chatDaSpostare);
+            }
+
+        }
+
     }
     </script>
 </body>

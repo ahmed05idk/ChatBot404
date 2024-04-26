@@ -8,7 +8,11 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 
-
+/**
+ * Questa classe salva in fillavle i campi relativi alle chat.
+ * 
+ * @author Ethan
+ */
 class Message extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;

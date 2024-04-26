@@ -15,7 +15,7 @@
         text-align: center;
     }
 
-    #app {
+    #app, body {
         background:
             linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
             linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
@@ -26,6 +26,9 @@
         background-color: #131313;
         background-size: 20px 20px;
 
+    }
+    body{
+        background-color: black !important;
     }
  
 

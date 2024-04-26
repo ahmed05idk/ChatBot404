@@ -160,7 +160,6 @@
     }
 
 
-
     #barra-sinistra {
         width: 300px;
         height: 100vh;
@@ -207,9 +206,7 @@
         box-sizing: border-box;
         border: 1px solid #ccc;
         border-radius: 5px;
-        resize: none;/*
-        height: 88%;
-        max-height: 200px;*/
+        resize: none;
         overflow-y: auto;
     }
 
@@ -242,13 +239,6 @@
 
 
 
-
-
-
-
-
-
-
     /* Stile generale per tutte le barre di scorrimento */
 
     ::-webkit-scrollbar {
@@ -263,9 +253,6 @@
     ::-webkit-scrollbar-track {
         background-color: transparent;
     }
-
-
-
 
 
 

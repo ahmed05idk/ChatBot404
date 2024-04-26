@@ -8,15 +8,24 @@ use App\Models\Message;
 use Illuminate\Support\Facades\Log;
 
 
-
+/**
+ * Questa classe gestisce le operazioni relative alla chat.
+ * 
+ * @author Ethan
+ */
 class ChatController extends Controller
 {
-    public function index()
-    {
-        $chats = Chat::all();
-        return view('welcome', compact('chats'));
-    }
 
+  
+    /**
+     * Qeuesto metodo valida i dati relativi alle chat
+     *
+     * @param \Illuminate\Http\Request $request richiesta HTTP
+     * 
+     * @return Success se la chat è valida
+     * 
+     * @author Ethan
+     */
     public function store(Request $request)
     {
         
@@ -39,20 +48,5 @@ class ChatController extends Controller
         return redirect('/')->with('success', 'Message is successfully saved');
     }
     
-    /*
-    public function get()
-    {
-        $mess = DB::table('messages')->select('message')->get();
 
-        return view('some-view')->with('messages', $mess);
-    }
-*/
-
-    public function destroy($id)
-    {
-        $chat = Chat::findOrFail($id);
-        $chat->delete();
-
-        return redirect('/')->with('success', 'Chat is successfully deleted');
-    }
 }
