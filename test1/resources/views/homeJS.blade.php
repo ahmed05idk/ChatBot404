@@ -101,19 +101,20 @@
 
 
     /**
-     * Questo metodo serve a selezionare l'ulltima chat creata o in caso la persona non abbia un account seleziona la chat di base (chat_1)
+     * Questo metodo serve a controllare se la finestra e cambiare chat in caso l'utente non sia registrato
      *
      * @author Ethan
      */
-    function selectFirstChat() {
+    $(document).ready(function() {
 
-        if (checkUserRegistration()) {
+        aggiornaLarghezzaBarraInvio();
 
-            cambiaChat(ultimaChatCreata);
-            return;
+        if (!checkUserRegistration()) {
+
+            cambiaChat('chat_1');
+
         }
-        cambiaChat('chat_1');
-    };
+    });
 
 
     /**
@@ -232,7 +233,7 @@
             nuovaChatDiv.id = chatID;
             nuovaChatDiv.classList.add('chat-item');
             nuovaChatDiv.innerHTML = '<div style="display: flex; justify-content: space-between;">' +
-                '<span id="nomeChat">Nome chat generata ' + chatCounter + '</span>' +
+                '<span id="nomeChat">' + impostaNomeChat(chatCounter) + '</span>' +
                 '<button class="chatButton" onclick="eliminaChat(event, \'' + chatID +
                 '\')"><i class="fas fa-trash-alt"></i></button></div>';
             nuovaChatDiv.onclick = function() {
@@ -256,6 +257,20 @@
             chatCounter++;
             ultimaChatCreata = chatID;
         }
+    }
+
+
+    /**
+     * Questo metodo serve a impostare il nome della chat in base al chatCounter
+     * 
+     * @param chatCounter - numero della chat
+     * 
+     * @return - ritorna il nome della chat
+     * 
+     * @autor Ethan
+     */
+    function impostaNomeChat(chatCounter) {
+        return 'Nome chat generato ' + chatCounter;
     }
 
 
@@ -389,6 +404,12 @@
     function cambiaChat(chatID) {
         var element = document.getElementById(chatID);
         if (element) {
+
+            var activeChatId = $(".active-chat").attr("id");
+            if (activeChatId) {
+                $("#" + activeChatId.replace("-container", "")).css("background-color", "");
+            }
+
             // Nascondi tutti i contenitori delle chat
             var chatContainers = document.querySelectorAll('.chat');
             chatContainers.forEach(function(container) {
@@ -398,6 +419,7 @@
             // Mostra solo il contenitore della chat selezionata
             var chatContainer = document.getElementById(chatID + '-container');
             chatContainer.classList.add('active-chat');
+            $('#' + chatID).css('background-color', '#004f00');
 
             // Inserisce i messaggi della nuova chat attiva
             var inputMessaggio = document.getElementById('messaggio-input');
@@ -407,6 +429,10 @@
         $('#barra-destra').animate({
             scrollTop: $('#barra-destra').prop("scrollHeight")
         }, 'slow');
+
+
+
+
 
     }
 
@@ -694,10 +720,9 @@
     // ascoltatore di eventi per il resize della finestra
     window.addEventListener('resize', controllaDimensioniFinestra);
 
-    $(document).ready(function() {
-        controllaDimensioniFinestra();
-        selectFirstChat();
-    });
+
+
+
 
 
 
@@ -852,6 +877,9 @@
                 var chatDaSpostare = $('#' + messaggi[i].ChatID);
                 $('#elenco-chat').prepend(chatDaSpostare);
             }
+
+
+            cambiaChat(messaggi[0].ChatID);
 
         }
 

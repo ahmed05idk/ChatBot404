@@ -21,7 +21,8 @@
     #containerPrincipale,
     #rigaPrincipale,
     #barra-destra,
-    #contenitore-input {
+    #contenitore-input,
+    #barra-sopra {
         background:
             linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
             linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
@@ -61,10 +62,14 @@
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        margin: 10px 0 20px 0;
+        padding: 20px 0 40px 0;
         height: 30px;
         gap: 10px;
+        position: sticky;
+        top: 0;
     }
+
+
 
     #elenco-chat {
         margin-bottom: 20px;
@@ -82,7 +87,7 @@
 
         justify-content: left;
         background-color: rgba(255, 255, 255, 0);
-        
+
 
     }
 
@@ -185,7 +190,7 @@
         background-color: #2e8500;
         border-radius: 5px;
         margin: 0.5rem;
-        
+
     }
 
     .chat:not(.active-chat) {
@@ -221,10 +226,11 @@
     }
 
     .chatButton {
-        background-color: #2e8500;
+        background-color: rgba(0, 0, 0, 0);
         color: #e60000;
         border: 10px;
     }
+
 
 
     #boxTitleCreateChat {
@@ -253,6 +259,10 @@
     ::-webkit-scrollbar-track {
         background-color: transparent;
     }
+
+
+
+
 
 
 

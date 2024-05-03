@@ -5,13 +5,16 @@ Lista file importanti/che ho usato:
     test1\routes\web -> salvataggio nel db di chat e account utenti, per utenti utilizza i controller per salvare e validare
 
 
-    test1\app\Http\Controllers\Auth -> file per logn/register
+
+    test1\app\Http\Controllers\Auth -> file per gestione logn/register 
 
     test1\app\Http\Controllers\Auth\VerificationController -> creazione numero casuale da usare nella verifica mail
 
-    test1\app\Http\Controllers\Auth\AuthController -> funzioni di validazione/salvataggio nel db delle credenziali dell account
+    test1\app\Http\Controllers\AuthController -> funzioni di validazione/salvataggio nel db delle credenziali dell account
 
-    test1\app\Http\Controllers\Auth\AuthControllerfunzioni di validazione/salvataggio nel db delle chat
+
+    test1\app\Http\Controllers\ChatController -> funzioni per validazione dei messaggi
+
 
 
     test1\resources\views\home -> parte html della home del sito
@@ -21,6 +24,15 @@ Lista file importanti/che ho usato:
     test1\resources\views\homeStyle -> parte css della home del sito
 
     test1\resources\views\verificationeEmail -> template della mail che viene inviata quando ti registri
+
+
+
+    test1\resources\views\passwords\login -> pagina di login
+
+    test1\resources\views\passwords\register -> pagina di register
+    
+    test1\resources\views\passwords\layout -> layout di login e register
+
 
 
     test1\app\Models\Message -> campi richiesti per il salvataggio nel db della chat
@@ -45,3 +57,8 @@ _token: '{{ csrf_token() }}' // Aggiungi questa linea per includere il token CSR
 
 mail: help.chatbot404@gmail.com
 pass: ChatBot404
+
+
+
+000webhost
+pass: ChatBot404$

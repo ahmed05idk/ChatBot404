@@ -34,11 +34,15 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
+        $updated_at = now()->format('Y-m-d H:i:s');
+        $created_at = now()->format('Y-m-d H:i:s');
         // Creazione di un nuovo utente nel database
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password')),
+            'updated_at' => $updated_at,
+            'created_at' => $created_at
         ]);
 
         // Autenticazione dell'utente appena registrato

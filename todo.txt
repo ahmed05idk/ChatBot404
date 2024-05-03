@@ -2,20 +2,10 @@ traduzioni nel file validation.php alcune rerrate
 
 testo che apppare quando bot risponde sctivi
 
-logo
-
 mettere nelle opzioni che ti torna alla pagina scelta tipo chatbot
 
-bug strano se crei troppe chat e ricarichi non carica/salva tutte le chat nuove
 
-barra input quando pagina viene ristretta ci mette un po a regolarsi
 
-se schiacci sul bottone invio senza screivere da errore
 
-quando carichi la pagina deve essere in fondo alla chat
 
-mette in cima l'ultima chat usata
 
-java doc
-
-quando 
