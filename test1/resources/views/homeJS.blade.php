@@ -455,7 +455,7 @@
 
         var messaggio = inputMessaggio.value;
 
-        if (!messaggio) {
+        if (!messaggio || !canWrite) {
             return;
         }
 
@@ -497,7 +497,7 @@
     }
 
 
-
+var canWrite = true;
     /**
      * Questo metodo serve a far rispondere l'ia in base al messaggio che gli viene passatos utilizzando una chiamata ajax verso un file python
      * 
@@ -506,7 +506,7 @@
      * @author Ethan
      */
     function rispostaIa(domanda) {
-
+        canWrite = false;
         var data = {
             domanda: domanda
         };
@@ -526,6 +526,7 @@
                 $('#barra-destra').animate({
                     scrollTop: $('#barra-destra').prop("scrollHeight")
                 }, 'fast');
+                canWrite = true;
 
             }
         };

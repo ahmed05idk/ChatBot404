@@ -28,4 +28,6 @@ sostituire la funzione up con
     }
     
 e poi fare 
+
+
 php artisan migrate
