@@ -1,6 +1,7 @@
 aggiungere cartella php alle variabili di sistema
 aggiungere node alle variabili di sistema
 
+fare pip install Flask e pip install flask_cors nel cmd
 installare composer
 
 aprire xampp
@@ -14,6 +15,10 @@ cd "C:\Users\eindemini\OneDrive - edu.ti.ch\Desktop\Scuola\Terzo anno\Progetto\C
 
 nel cmd fare
 php artisan serve
+
+
+in un altro cmd fare andare a ChatBot404\test1\resources\views>
+e fare python botRequest.py
 
 
 una volta avviato andate alla pagina http://127.0.0.1:8000/

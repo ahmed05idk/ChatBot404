@@ -31,11 +31,11 @@
      */
     window.addEventListener('DOMContentLoaded', (event) => {
         const textarea = document.getElementById('messaggio-input');
-        textarea.addEventListener('input', autoResize, false);
+        //textarea.addEventListener('input', autoResize, false);
 
         $('#barra-destra').animate({
             scrollTop: $('#barra-destra').prop("scrollHeight")
-        }, 'slow');
+        }, 'fast');
 
         textarea.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
@@ -94,7 +94,7 @@
 
         $('#barra-destra').animate({
             scrollTop: $('#barra-destra').prop("scrollHeight")
-        }, 'slow');
+        }, 'fast');
     }
 
 
@@ -113,7 +113,11 @@
 
             cambiaChat('chat_1');
 
+        } else {
+            var primoElemento = document.querySelector('#elenco-chat > :first-child');
+            cambiaChat(primoElemento.id);
         }
+
     });
 
 
@@ -428,7 +432,7 @@
 
         $('#barra-destra').animate({
             scrollTop: $('#barra-destra').prop("scrollHeight")
-        }, 'slow');
+        }, 'fast');
 
 
 
@@ -490,13 +494,12 @@
         autoResize();
 
         putOnTop(chatContainer.id.replace('-container', ''), false)
-
     }
 
 
 
     /**
-     * Questo metodo serve a far rispondere l'ia in base al messaggio che gli viene passato
+     * Questo metodo serve a far rispondere l'ia in base al messaggio che gli viene passatos utilizzando una chiamata ajax verso un file python
      * 
      * @param domanda - messaggio che l'utente ha scritto
      * 
@@ -504,15 +507,37 @@
      */
     function rispostaIa(domanda) {
 
-        // chiamata all'ia che prende la risposta
-        var risposta = "ciao"
+        var data = {
+            domanda: domanda
+        };
 
-        var chatContainer = document.querySelector('.active-chat');
+        var xhr = new XMLHttpRequest();
 
+        // definizione la callback da eseguire quando riceviamo una risposta dal server
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                
+                var response = JSON.parse(xhr.responseText);
 
-        chatContainer.innerHTML += '<p>Bot:<br>' + risposta + '</p>';
+                
+                var chatContainer = document.querySelector('.active-chat');
+                chatContainer.innerHTML += '<p>Bot:<br>' + response.output + '</p>';
 
+                $('#barra-destra').animate({
+                    scrollTop: $('#barra-destra').prop("scrollHeight")
+                }, 'fast');
+
+            }
+        };
+
+        
+        xhr.open('POST', 'http://127.0.0.1:5000/process_data', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        
+        xhr.send(JSON.stringify(data));
     }
+
 
 
     /**
