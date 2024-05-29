@@ -5,22 +5,22 @@ import openai
 app = Flask(__name__)
 CORS(app)
 
-openai.api_key = "sk-proj-ffMceocmRP0kBeOfi5DTT3BlbkFJK0lmO6C9E0zv4nbb1ovI"
+openai.api_key = "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"
 
 @app.route('/process_data', methods=['POST', 'OPTIONS'])
 def askquestion():
     if request.method == 'OPTIONS':
         response = make_response()
         response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["Access-Control-Allow-Methods"] = "POST"
+        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
 
     data = request.json
     question = data['domanda']
-    response = send_to_chatgpt(question, "Sei un proffessore universitario")
+    response_text = send_to_chatgpt(question, "Sei un professore universitario")
 
-    toReturn = make_response(jsonify({'output': response}), 200)
+    toReturn = make_response(jsonify({'output': response_text}), 200)
     toReturn.headers["Content-Type"] = "application/json"
     toReturn.headers["Access-Control-Allow-Origin"] = "*"
     return toReturn
@@ -37,7 +37,6 @@ def send_to_chatgpt(text, sysPrompt):
     )
 
     return response['choices'][0]['message']['content'].strip()
-
 
 if __name__ == '__main__':
     app.run(debug=True)
