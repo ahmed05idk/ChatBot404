@@ -120,7 +120,7 @@
 
     }
 
-    #colorWhite{
+    .card-header, .text-md-end{
         color: white !important;
     }
 
