@@ -62,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-                <h2 id="-chat-header">Tipologia bot scelto es: matematica</h2>
+                <h2 id="-chat-header tipologiaBot">Tipologia bot scelto es: matematica</h2>
 
                 <div class="row">
                     <div class="col-2">

@@ -156,7 +156,7 @@ Route::post('/messages', [ChatController::class, 'store']);
 Route::get('/', function () {
     $userId = Auth::id();
 
-    $messaggi = DB::table('messages')->select('message', 'ChatID', 'nomeChat', 'updated_at')->where('userCreationId', $userId)->get();
+    $messaggi = DB::table('messages')->select('message', 'ChatID', 'nomeChat', 'systemPrompt', 'updated_at')->where('userCreationId', $userId)->get();
 
     // Passa l'array di messaggi alla home
     return view('home')->with('messaggi', $messaggi);

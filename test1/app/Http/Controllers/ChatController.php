@@ -34,14 +34,16 @@ class ChatController extends Controller
             'chatID' => 'required',
             'userCreationId' => 'required',
             'nomeChat' => 'required',
+            'systemPrompt' => 'required',
         ]);
     
-        // Cambia 'Chat' con il tuo modello dei messaggi (presumibilmente 'Message')
+       
         $message = Message::create([
             'message' => $validatedData['message'],
             'chatID' => $validatedData['chatID'], 
             'userCreationId' => $validatedData['userCreationId'], 
             'nomeChat' => $validatedData['nomeChat'], 
+            'systemPrompt' => $validatedData['systemPrompt'],
         ]);
         
 
