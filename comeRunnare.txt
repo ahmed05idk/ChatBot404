@@ -6,7 +6,7 @@ installare composer
 
 aprire xampp
 
-schiacciare su admin di mysqul alla porta 3306
+schiacciare su admin di mysql alla porta 3306
 
 creare database chatBotData
 

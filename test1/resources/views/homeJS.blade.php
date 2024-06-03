@@ -201,16 +201,17 @@
     updateUltimaChatCreata();
 
 
+
+    var sysPrompt;
+
     /**
-     * Questo metodo serve a creare una nuova chat quando si schiaccia sul pulsante crea nuova chat o se si elimina l'unica chat esistente. 
-     * In caso si cerchi di ceare una nuova chat ma l'ultima creata non ha del contenuto non lo permette
-     * 
+     * Questo metodo serve a creare una nuova chat quando si schiaccia sul pulsante crea nuova chat o se si elimina l'unica chat esistente.
+     * In caso si cerchi di creare una nuova chat ma l'ultima creata non ha del contenuto non lo permette
      * 
      * @param chatIDPassato - se bisogna creare un metodo con un id specifico
-     * 
      * @param daEliminare - variabile che serve a creare comunque una chat quando l'unica chat esistente viene eliminata anche se la chat è vuota, se no createNewChat sarebbe false
-     * 
      * @author Ethan
+     * @author Ahmed
      */
     function creaNuovaChat(chatIDPassato, daEliminare) {
         var createNewChat = true;
@@ -225,43 +226,138 @@
         }
 
         if (createNewChat) {
+            
+            if(!chatIDPassato){
 
-            var barraSinistra = document.getElementById('barra-sinistra');
-            var nuovaChatDiv = document.createElement('div');
-            var chatID;
-            if (chatIDPassato) {
-                chatID = chatIDPassato;
-            } else {
-                chatID = 'chat_' + chatCounter;
+                
+            mostraPopupSysPrompt(function(inputValue) {
+
+                // Apri qui un popup e chiedi come deve essere il sysPrompt
+                sysPrompt = inputValue;
+
+                var barraSinistra = document.getElementById('barra-sinistra');
+                var nuovaChatDiv = document.createElement('div');
+                var chatID;
+                if (chatIDPassato) {
+                    chatID = chatIDPassato;
+                } else {
+                    chatID = 'chat_' + chatCounter;
+                }
+                nuovaChatDiv.id = chatID;
+                nuovaChatDiv.classList.add('chat-item');
+                nuovaChatDiv.innerHTML = '<div style="display: flex; justify-content: space-between;">' +
+                    '<span id="nomeChat">' + impostaNomeChat(chatCounter) + '</span>' +
+                    '<button class="chatButton" onclick="eliminaChat(event, \'' + chatID +
+                    '\')"><i class="fas fa-trash-alt"></i></button></div>';
+                nuovaChatDiv.onclick = function() {
+                    cambiaChat(chatID);
+                };
+
+                var elencoChat = document.getElementById('elenco-chat');
+                if (elencoChat.firstChild) {
+                    elencoChat.insertBefore(nuovaChatDiv, elencoChat.firstChild);
+                } else {
+                    elencoChat.appendChild(nuovaChatDiv);
+                }
+
+                // Creazione del contenitore dei messaggi per questa chat
+                var chatContainer = document.getElementById('chat-container');
+                var nuovaChatContainer = document.createElement('div');
+                nuovaChatContainer.id = chatID + '-container';
+                nuovaChatContainer.sysPrompt = sysPrompt;
+                nuovaChatContainer.classList.add('chat');
+                chatContainer.appendChild(nuovaChatContainer);
+
+                chatCounter++;
+                ultimaChatCreata = chatID;
+            });
             }
-            nuovaChatDiv.id = chatID;
-            nuovaChatDiv.classList.add('chat-item');
-            nuovaChatDiv.innerHTML = '<div style="display: flex; justify-content: space-between;">' +
-                '<span id="nomeChat">' + impostaNomeChat(chatCounter) + '</span>' +
-                '<button class="chatButton" onclick="eliminaChat(event, \'' + chatID +
-                '\')"><i class="fas fa-trash-alt"></i></button></div>';
-            nuovaChatDiv.onclick = function() {
-                cambiaChat(chatID);
-            };
+            else{
 
-            var elencoChat = document.getElementById('elenco-chat');
-            if (elencoChat.firstChild) {
-                elencoChat.insertBefore(nuovaChatDiv, elencoChat.firstChild);
-            } else {
-                elencoChat.appendChild(nuovaChatDiv);
+                if (createNewChat) {
+
+                    var barraSinistra = document.getElementById('barra-sinistra');
+                    var nuovaChatDiv = document.createElement('div');
+                    var chatID;
+                    if (chatIDPassato) {
+                        chatID = chatIDPassato;
+                    } else {
+                        chatID = 'chat_' + chatCounter;
+                    }
+                    nuovaChatDiv.id = chatID;
+                    nuovaChatDiv.classList.add('chat-item');
+                    nuovaChatDiv.innerHTML = '<div style="display: flex; justify-content: space-between;">' +
+                        '<span id="nomeChat">' + impostaNomeChat(chatCounter) + '</span>' +
+                        '<button class="chatButton" onclick="eliminaChat(event, \'' + chatID +
+                        '\')"><i class="fas fa-trash-alt"></i></button></div>';
+                    nuovaChatDiv.onclick = function() {
+                        cambiaChat(chatID);
+                    };
+
+                    var elencoChat = document.getElementById('elenco-chat');
+                    if (elencoChat.firstChild) {
+                        elencoChat.insertBefore(nuovaChatDiv, elencoChat.firstChild);
+                    } else {
+                        elencoChat.appendChild(nuovaChatDiv);
+                    }
+
+                    // Creazione del contenitore dei messaggi per questa chat
+                    var chatContainer = document.getElementById('chat-container');
+                    var nuovaChatContainer = document.createElement('div');
+                    nuovaChatContainer.id = chatID + '-container';
+                    nuovaChatContainer.classList.add('chat');
+                    chatContainer.appendChild(nuovaChatContainer);
+
+                    chatCounter++;
+                    ultimaChatCreata = chatID;
+
+                    }
             }
-
-            // Creazione del contenitore dei messaggi per questa chat
-            var chatContainer = document.getElementById('chat-container');
-            var nuovaChatContainer = document.createElement('div');
-            nuovaChatContainer.id = chatID + '-container';
-            nuovaChatContainer.classList.add('chat');
-            chatContainer.appendChild(nuovaChatContainer);
-
-            chatCounter++;
-            ultimaChatCreata = chatID;
+            
         }
     }
+
+    /**
+     * Mostra un popup per chiedere all'utente come deve essere il sysPrompt.
+     * @param callback - Funzione da chiamare con il valore del sysPrompt inserito dall'utente.
+     * @author Ahmed
+     */
+    function mostraPopupSysPrompt(callback) {
+        var popup = document.createElement('div');
+        popup.style.position = 'fixed';
+        popup.style.top = '50%';
+        popup.style.left = '50%';
+        popup.style.transform = 'translate(-50%, -50%)';
+        popup.style.backgroundColor = '#fff';
+        popup.style.padding = '20px';
+        popup.style.boxShadow = '0px 0px 10px rgba(0, 0, 0, 0.1)';
+        popup.style.zIndex = '1000';
+
+        var inputLabel = document.createElement('label');
+        inputLabel.textContent = 'Inserisci il prompt di sistema:';
+        inputLabel.style.color = '#000';
+        popup.appendChild(inputLabel);
+
+        var inputField = document.createElement('input');
+        inputField.type = 'text';
+        inputField.style.width = '100%';
+        inputField.style.marginTop = '10px';
+        popup.appendChild(inputField);
+
+        var submitButton = document.createElement('button');
+        submitButton.textContent = 'OK';
+        submitButton.style.marginTop = '10px';
+        submitButton.onclick = function() {
+            var inputValue = inputField.value;
+            document.body.removeChild(popup);
+            callback(inputValue);
+        };
+        popup.appendChild(submitButton);
+
+        document.body.appendChild(popup);
+    }
+
+
 
 
     /**
@@ -442,6 +538,12 @@
 
 
 
+    
+    var canWrite = true; 
+    var chatModificate = []; 
+    var messaggiPerChat = {}; 
+    var timestamps = []; 
+    
     /**
      * Questo metodo serve a inviare il messaggio e a far rispondere l'ia, se il messaggio ha più di 2000 caratteri non lo invia 
      * 
@@ -494,7 +596,8 @@
         autoResize();
 
         putOnTop(chatContainer.id.replace('-container', ''), false)
-    }
+        }
+
 
 
 var canWrite = true;
