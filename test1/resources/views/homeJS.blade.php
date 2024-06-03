@@ -143,6 +143,7 @@
 
             var chatIDs = [];
             messaggi.forEach(function (messaggio) {
+
                 if (!chatIDs.includes(messaggio.ChatID)) {
                     chatIDs.push(messaggio.ChatID);
 
@@ -152,12 +153,17 @@
 
             // crea una chat pper ogni chatID
             chatIDs.forEach(function (chatID) {
+
                 creaNuovaChat(chatID);
             });
 
             // popopla le chat con i messaggi e il nome
             messaggi.forEach(function (messaggio) {
-                document.getElementById(messaggio.ChatID + '-container').innerHTML = messaggio.message;
+                var chatContainer = document.getElementById(messaggio.ChatID + '-container');
+
+                chatContainer.innerHTML = messaggio.message;
+
+                chatContainer.setAttribute('data-sys-prompt', messaggio.systemPrompt);
 
                 document.querySelector("#" + messaggio.ChatID + " div span").innerHTML = messaggio.nomeChat;
 
@@ -230,9 +236,12 @@
 
                 if (!chatIDPassato) {
 
-
                     mostraPopupsystemPrompt(function (inputValue) {
                         systemPrompt = inputValue;
+
+                        if(systemPrompt === "#cancel019283#"){
+                            return;
+                        }
 
                         var barraSinistra = document.getElementById('barra-sinistra');
                         var nuovaChatDiv = document.createElement('div');
@@ -244,8 +253,9 @@
                         }
                         nuovaChatDiv.id = chatID;
                         nuovaChatDiv.classList.add('chat-item');
+
                         nuovaChatDiv.innerHTML = '<div style="display: flex; justify-content: space-between;">' +
-                            '<span id="nomeChat">' + impostaNomeChat(chatCounter) + '</span>' +
+                            '<span id="nomeChat">' + systemPrompt + '</span>' +
                             '<button class="chatButton" onclick="eliminaChat(event, \'' + chatID +
                             '\')"><i class="fas fa-trash-alt"></i></button></div>';
                         nuovaChatDiv.onclick = function () {
@@ -263,15 +273,23 @@
                         var chatContainer = document.getElementById('chat-container');
                         var nuovaChatContainer = document.createElement('div');
                         nuovaChatContainer.id = chatID + '-container';
-                        nuovaChatContainer.setAttribute('data-sys-prompt', systemPrompt); // Aggiungi systemPrompt come attributo data
+                        nuovaChatContainer.setAttribute('data-sys-prompt', systemPrompt);
                         nuovaChatContainer.classList.add('chat');
+
+
+                        var systemPromptHeader = document.createElement('h2');
+                        systemPromptHeader.textContent = "Prompt di sistema scelto: " + systemPrompt;
+                        systemPromptHeader.style.paddingBottom = "20px";
+                        nuovaChatContainer.appendChild(systemPromptHeader);
+
                         chatContainer.appendChild(nuovaChatContainer);
+
+
 
                         chatCounter++;
                         ultimaChatCreata = chatID;
                     });
-                }
-                else {
+                } else {
 
                     if (createNewChat) {
 
@@ -286,7 +304,7 @@
                         nuovaChatDiv.id = chatID;
                         nuovaChatDiv.classList.add('chat-item');
                         nuovaChatDiv.innerHTML = '<div style="display: flex; justify-content: space-between;">' +
-                            '<span id="nomeChat">' + impostaNomeChat(chatCounter) + '</span>' +
+                            '<span id="nomeChat">' + "Nuova chat" + '</span>' +
                             '<button class="chatButton" onclick="eliminaChat(event, \'' + chatID +
                             '\')"><i class="fas fa-trash-alt"></i></button></div>';
                         nuovaChatDiv.onclick = function () {
@@ -316,53 +334,95 @@
             }
         }
 
+
         /**
          * Mostra un popup per chiedere all'utente come deve essere il systemPrompt.
          * @param callback - Funzione da chiamare con il valore del systemPrompt inserito dall'utente.
          * @author Ahmed
+         * @autor Ethan
          */
         function mostraPopupsystemPrompt(callback) {
-            var popup = document.createElement('div');
-            popup.style.position = 'fixed';
-            popup.style.top = '50%';
-            popup.style.left = '50%';
-            popup.style.transform = 'translate(-50%, -50%)';
-            popup.style.backgroundColor = '#fff';
-            popup.style.padding = '20px';
-            popup.style.boxShadow = '0px 0px 10px rgba(0, 0, 0, 0.1)';
-            popup.style.zIndex = '1000';
+    // Creazione dello sfondo
+    var background = $('<div class="popup-background"></div>').css({
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)', 
+        zIndex: '999'
+    });
 
-            var inputLabel = document.createElement('label');
-            inputLabel.textContent = 'Inserisci il prompt di sistema:';
-            inputLabel.style.color = '#000';
-            popup.appendChild(inputLabel);
+    // Creazione del popup
+    var popup = $('<div></div>').css({
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: '#fff',
+        padding: '20px',
+        paddingBottom: '25px',
+        borderRadius: '5px',
+        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+        zIndex: '1000'
+    });
 
-            var inputField = document.createElement('input');
-            inputField.type = 'text';
-            inputField.style.width = '100%';
-            inputField.style.marginTop = '10px';
-            popup.appendChild(inputField);
+    var inputLabel = $('<h2>Inserisci il prompt di sistema:</h2>').css({
+        color: '#000'
+    });
+    popup.append(inputLabel);
 
-            var submitButton = document.createElement('button');
-            submitButton.textContent = 'OK';
-            submitButton.style.marginTop = '10px';
-            submitButton.onclick = function () {
-                var inputValue = inputField.value;
-                document.body.removeChild(popup);
-                callback(inputValue);
-                if (!checkUserRegistration()) {
+    var inputField = $('<input type="text">').css({
+        width: '100%',
+        marginTop: '10px',
+        marginBottom: '20px'
+    }).attr('placeholder', 'Inserisci prompt');
+    popup.append(inputField);
 
-                    cambiaChat('chat_1');
+    var buttonContainer = $('<div></div>').css({
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginTop: '10px'
+    });
 
-                }
-                cambiaChat(ultimaChatCreata);
-            };
-            popup.appendChild(submitButton);
-
-            document.body.appendChild(popup);
-
-
+    var submitButton = $('<button>Conferma</button>').css({
+        marginRight: '10px'
+    }).click(function() {
+        var inputValue = inputField.val();
+        background.remove();
+        popup.remove();
+        callback(inputValue);
+        if (!checkUserRegistration()) {
+            cambiaChat('chat_1');
         }
+        cambiaChat(ultimaChatCreata);
+    }).attr({
+        id: 'conferma-btn',
+        class: 'confirm-btn'
+    });
+    buttonContainer.append(submitButton);
+
+    var cancelButton = $('<button>Annulla</button>').click(function() {
+        var inputValue = "#cancel019283#";
+        background.remove();
+        popup.remove();
+        callback(inputValue);
+        if (!checkUserRegistration()) {
+            cambiaChat('chat_1');
+        }
+        cambiaChat(ultimaChatCreata);
+    }).attr({
+        id: 'annulla-btn',
+        class: 'cancel-btn'
+    });
+    buttonContainer.append(cancelButton);
+
+    popup.append(buttonContainer);
+
+    $('body').append(background);
+    $('body').append(popup);
+}
+
 
 
 
@@ -377,8 +437,10 @@
          * @autor Ethan
          */
         function impostaNomeChat(chatCounter) {
-            return 'Nome chat generato ' + chatCounter;
+            //Funzione in disuso
+            return null;
         }
+
 
 
         /**
@@ -603,7 +665,7 @@
             autoResize();
 
             putOnTop(chatContainer.id.replace('-container', ''), false)
-            
+
         }
 
 
@@ -618,8 +680,10 @@
          */
         function rispostaIa(domanda) {
             canWrite = false;
+            var promptDiSistema = $(".active-chat h2:contains('Prompt di sistema scelto')").text().replace('Prompt di sistema scelto: ', '');
             var data = {
-                domanda: domanda
+                domanda: domanda,
+                promptDiSistema: promptDiSistema
             };
 
             var xhr = new XMLHttpRequest();
@@ -629,7 +693,6 @@
                 if (xhr.readyState === 4 && xhr.status === 200) {
 
                     var response = JSON.parse(xhr.responseText);
-
 
                     var chatContainer = document.querySelector('.active-chat');
                     chatContainer.innerHTML += '<p>Bot:<br>' + response.output + '</p>';
@@ -649,6 +712,8 @@
 
             xhr.send(JSON.stringify(data));
         }
+
+
 
 
 
@@ -711,7 +776,7 @@
                 var idUtente = <?php echo json_encode(Auth::check() ? Auth::user()->id : null); ?>;
 
                 if (messages) {
-                    
+
                     salvaChatNelDatabase(chatID, messages, idUtente, nomeChat, systemPrompt) // Passa systemPrompt
                         .then(function () { })
                         .catch(function (error) {
@@ -743,7 +808,7 @@
          * @author Ethan
          */
         function salvaChatNelDatabase(chatID, messages, idUtente, nomeChat, systemPrompt) {
-            
+
             return axios.post('/messages', {
                 chatID: chatID,
                 message: messages,

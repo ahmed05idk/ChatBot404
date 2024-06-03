@@ -18,12 +18,14 @@ def askquestion():
 
     data = request.json
     question = data['domanda']
-    response_text = send_to_chatgpt(question, "Sei un professore universitario")
-
+    sys_prompt = data['promptDiSistema']  # Recupera il prompt di sistema dai dati inviati
+    response_text = send_to_chatgpt(question, sys_prompt)
+    
     toReturn = make_response(jsonify({'output': response_text}), 200)
     toReturn.headers["Content-Type"] = "application/json"
     toReturn.headers["Access-Control-Allow-Origin"] = "*"
     return toReturn
+
 
 def send_to_chatgpt(text, sysPrompt):
     model = "gpt-3.5-turbo"

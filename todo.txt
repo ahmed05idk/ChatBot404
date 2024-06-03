@@ -1,15 +1,9 @@
 
-popup con input per tipologia chat bot
-
-aggiungere nel db tipologia chatbot e lo manda al py in base alla chat che stai usando (prompt di sistema)
-
-titolo chat con un altro script py e un altea key
-
-blocco 3 domande al minuto
-
-cambiare scritta tipo chat bot scelto: con il prompt dal db
 
 
 
 
-provare a dockerizarla
+
+
+
+
