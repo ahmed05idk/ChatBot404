@@ -88,7 +88,7 @@
                     </form>
                 </div>
                 <div class="row" style="text-align: center;  padding-top:10px">
-                    <a href="/register" class="btn-link" style="text-decoration: none; text-align: center;"
+                    <a href="/login" class="btn-link" style="text-decoration: none; text-align: center;"
                         id="changeLogReg">Hai già un account? Accedi</a>
                 </div>
             </div>

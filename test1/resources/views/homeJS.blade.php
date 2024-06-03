@@ -239,7 +239,7 @@
                     mostraPopupsystemPrompt(function (inputValue) {
                         systemPrompt = inputValue;
 
-                        if(systemPrompt === "#cancel019283#"){
+                        if (systemPrompt === "#cancel019283#") {
                             return;
                         }
 
@@ -342,86 +342,91 @@
          * @autor Ethan
          */
         function mostraPopupsystemPrompt(callback) {
-    // Creazione dello sfondo
-    var background = $('<div class="popup-background"></div>').css({
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.7)', 
-        zIndex: '999'
-    });
 
-    // Creazione del popup
-    var popup = $('<div></div>').css({
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        backgroundColor: '#fff',
-        padding: '20px',
-        paddingBottom: '25px',
-        borderRadius: '5px',
-        boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-        zIndex: '1000'
-    });
+            var background = $('<div class="popup-background"></div>').css({
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                zIndex: '999'
+            });
 
-    var inputLabel = $('<h2>Inserisci il prompt di sistema:</h2>').css({
-        color: '#000'
-    });
-    popup.append(inputLabel);
+            // Creazione del popup
+            var popup = $('<div></div>').css({
+                position: 'fixed',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                backgroundColor: '#fff',
+                padding: '20px',
+                paddingBottom: '25px',
+                borderRadius: '5px',
+                boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+                zIndex: '1000'
+            });
 
-    var inputField = $('<input type="text">').css({
-        width: '100%',
-        marginTop: '10px',
-        marginBottom: '20px'
-    }).attr('placeholder', 'Inserisci prompt');
-    popup.append(inputField);
+            var inputLabel = $('<h2>Inserisci il prompt di sistema:</h2>').css({
+                color: '#000'
+            });
+            popup.append(inputLabel);
 
-    var buttonContainer = $('<div></div>').css({
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginTop: '10px'
-    });
+            var inputField = $('<input type="text">').css({
+                width: '100%',
+                marginTop: '10px',
+                marginBottom: '20px'
+            }).attr('placeholder', 'Inserisci prompt');
+            popup.append(inputField);
 
-    var submitButton = $('<button>Conferma</button>').css({
-        marginRight: '10px'
-    }).click(function() {
-        var inputValue = inputField.val();
-        background.remove();
-        popup.remove();
-        callback(inputValue);
-        if (!checkUserRegistration()) {
-            cambiaChat('chat_1');
+            var buttonContainer = $('<div></div>').css({
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginTop: '10px'
+            });
+
+            var submitButton = $('<button>Conferma</button>').css({
+                marginRight: '10px'
+            }).click(function () {
+                var inputValue = inputField.val();
+                background.remove();
+                popup.remove();
+                callback(inputValue);
+                if (!checkUserRegistration()) {
+                    cambiaChat('chat_1');
+                }
+                cambiaChat(ultimaChatCreata);
+            }).attr({
+                id: 'conferma-btn',
+                class: 'confirm-btn'
+            });
+            buttonContainer.append(submitButton);
+
+            var cancelButton = $('<button>Annulla</button>').click(function () {
+                var inputValue = "#cancel019283#";
+                if ($('#elenco-chat').is(':empty')) {
+                    alert('Inserire un prompt per la prima chat');
+                } else {
+                    background.remove();
+                    popup.remove();
+                    callback(inputValue);
+                    if (!checkUserRegistration()) {
+                        cambiaChat('chat_1');
+                    }
+                    cambiaChat(ultimaChatCreata);
+                }
+            }).attr({
+                id: 'annulla-btn',
+                class: 'cancel-btn'
+            });
+
+            buttonContainer.append(cancelButton);
+
+            popup.append(buttonContainer);
+
+            $('body').append(background);
+            $('body').append(popup);
         }
-        cambiaChat(ultimaChatCreata);
-    }).attr({
-        id: 'conferma-btn',
-        class: 'confirm-btn'
-    });
-    buttonContainer.append(submitButton);
-
-    var cancelButton = $('<button>Annulla</button>').click(function() {
-        var inputValue = "#cancel019283#";
-        background.remove();
-        popup.remove();
-        callback(inputValue);
-        if (!checkUserRegistration()) {
-            cambiaChat('chat_1');
-        }
-        cambiaChat(ultimaChatCreata);
-    }).attr({
-        id: 'annulla-btn',
-        class: 'cancel-btn'
-    });
-    buttonContainer.append(cancelButton);
-
-    popup.append(buttonContainer);
-
-    $('body').append(background);
-    $('body').append(popup);
-}
 
 
 

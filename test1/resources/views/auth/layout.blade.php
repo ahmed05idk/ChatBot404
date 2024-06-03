@@ -36,7 +36,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 96vh;
+        height: 90vh;
         padding: 20px;
     }
 
@@ -119,6 +119,12 @@
         border-top: 1px solid black;
 
     }
+
+    #colorWhite{
+        color: white !important;
+    }
+
+
     </style>
 </head>
 

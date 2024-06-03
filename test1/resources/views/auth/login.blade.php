@@ -85,7 +85,7 @@
         <div class="row" style="text-align: center; justify-content: center;">
             <a href="/register" class="btn-link" style="text-decoration: none; text-align: center;"
                 id="changeLogReg">Non hai un account?
-                registrati</a>
+                Registrati</a>
         </div>
     </div>
 </div>
