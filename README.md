@@ -55,10 +55,3 @@ _token: '{{ csrf_token() }}' // Aggiungi questa linea per includere il token CSR
 
 
 
-mail: help.chatbot404@gmail.com
-pass: ChatBot404
-
-
-
-000webhost
-pass: ChatBot404$
